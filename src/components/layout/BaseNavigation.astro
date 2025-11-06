@@ -8,64 +8,172 @@ const navigationItems = [
   { name: 'Blog', url: '/blog/' },
 ];
 
-const socialIcons = [
+const categories = [
   {
-    name: 'GitHub',
-    url: 'https://github.com/eliancodes/brutal',
-    icon: 'i-uil-github',
+    name: 'Gadgets',
+    items: [
+      { name: 'Headphones', url: '#' },
+      { name: 'Chargers', url: '#' },
+      { name: 'Smart Lights', url: '#' },
+    ],
   },
   {
-    name: 'Twitter',
-    url: 'https://www.twitter.com/eliancodes',
-    icon: 'i-uil-twitter',
+    name: 'Home Stuff',
+    items: [
+      { name: 'Kitchen', url: '#' },
+      { name: 'Desk Setup', url: '#' },
+      { name: 'Organization', url: '#' },
+    ],
   },
-  { name: 'RSS', url: '/feed.xml', icon: 'i-uil-rss' },
+  {
+    name: 'Funny Gifts',
+    items: [
+      { name: 'Pranks', url: '#' },
+      { name: 'Gag Gifts', url: '#' },
+      { name: 'Party', url: '#' },
+    ],
+  },
+  {
+    name: 'TikTok Finds',
+    items: [
+      { name: 'Viral Tech', url: '#' },
+      { name: 'Room Aesthetic', url: '#' },
+      { name: 'Creator Tools', url: '#' },
+    ],
+  },
 ];
+
+const tiktokUrl = 'https://www.tiktok.com/@highestliked';
 
 const { pageTitle } = Astro.props;
 ---
 
-<header class='border-b-4 border-black flex justify-between p-6 items-center'>
+<header class='site-nav sticky top-0 z-50 bg-white border-b-4 border-black'>
   {pageTitle && <h1 class='hidden'>{pageTitle}</h1>}
-  <a href='/' title='Back to Home'>
-    <p class='righteous md:text-5xl'>Brutal</p>
-  </a>
-  <nav class='hidden md:inline-block'>
-    <h2 class='hidden'>Navigation</h2>
-    <ul class='flex gap-8 poppins'>
-      {
-        navigationItems.map((item) => (
-          <li>
-            <a
-              class='text-lg font-medium hover:text-green hover:underline transition-all duration-150 ease-in-out'
-              href={item.url}
-              title={`Go to ${item.name}`}
-            >
-              {item.name}
-            </a>
-          </li>
-        ))
-      }
-      {
-        socialIcons.map((item) => (
-          <li>
-            <a
-              href={item.url}
-              class='hover:text-green hover:underline transition-all duration-150 ease-in-out'
-              target='_blank'
-              title={`'See @ElianCodes on ${item.name}`}
-            >
-              <div class:list={[item.icon, 'w-6 h-6']} />
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
-  <nav class='md:hidden flex'>
-    <h2 class='hidden'>Mobile Navigation</h2>
-    <ul>
-      <li><a href='/blog/'>Blog</a></li>
-    </ul>
-  </nav>
+  <div class='container mx-auto px-4'>
+    <div class='nav-bar flex items-center justify-between py-3 md:py-5 transition-all duration-300'>
+      <!-- Left: Logo -->
+      <div class='shrink-0'>
+        <a href='/' title='Back to Home' class='block'>
+          <p class='righteous text-2xl md:text-4xl leading-none whitespace-nowrap'>Highest Liked</p>
+        </a>
+      </div>
+
+      <!-- Center: Categories (desktop) -->
+      <div class='hidden md:flex flex-1 justify-center items-center gap-6 px-4'>
+        {categories.map((cat) => (
+          <div class='relative group'>
+            <button class='poppins text-base font-semibold hover:text-[#FF9900] transition-colors'>
+              {cat.name}
+              <span class='ml-1'>▾</span>
+            </button>
+            <div class='absolute left-1/2 -translate-x-1/2 mt-2 hidden group-hover:block bg-white border-2 border-black rounded-xl shadow-lg min-w-[220px] z-50'>
+              <ul class='p-2'>
+                {cat.items.map((sub) => (
+                  <li>
+                    <a href={sub.url} class='block px-4 py-2 text-sm hover:bg-[#FFF4E5] rounded-lg'>
+                      {sub.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Right: Links -->
+      <div class='hidden md:flex items-center gap-6 shrink-0'>
+        {navigationItems.map((item) => (
+          <a
+            class='poppins text-base font-semibold hover:text-[#FF9900] transition-colors'
+            href={item.url}
+            title={`Go to ${item.name}`}
+          >
+            {item.name}
+          </a>
+        ))}
+        <a href={tiktokUrl} target='_blank' title='TikTok' aria-label='TikTok'
+          class='inline-flex items-center justify-center'>
+          <img src='/icon/tiktokicon.png' alt='TikTok' class='h-6 w-6 object-contain align-middle' loading='eager' />
+        </a>
+      </div>
+
+      <!-- Mobile: hamburger -->
+      <button class='md:hidden poppins text-base font-semibold border-2 border-black px-3 py-1 rounded-lg' id='navToggle'>Menu</button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class='md:hidden hidden flex-col gap-4 pb-4' id='mobileMenu'>
+      <div class='flex flex-col gap-2'>
+        {navigationItems.map((item) => (
+          <a class='p-2 border-2 border-black rounded-lg' href={item.url}>{item.name}</a>
+        ))}
+        <a class='p-2 border-2 border-black rounded-lg' href={tiktokUrl} target='_blank'>TikTok</a>
+      </div>
+      <div class='grid grid-cols-2 gap-2'>
+        {categories.map((cat) => (
+          <details class='border-2 border-black rounded-lg'>
+            <summary class='p-2 font-semibold'>{cat.name}</summary>
+            <ul class='p-2 pt-0'>
+              {cat.items.map((sub) => (
+                <li><a class='block px-2 py-1 text-sm rounded hover:bg-[#FFF4E5]' href={sub.url}>{sub.name}</a></li>
+              ))}
+            </ul>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
 </header>
+
+<style>
+  .site-nav .nav-bar.shrink {
+    padding-top: 0.5rem; /* py-2 */
+    padding-bottom: 0.5rem;
+  }
+  .site-nav .nav-bar.shrink .righteous {
+    font-size: 1.25rem; /* smaller when shrunk */
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const navBar = document.querySelector('.site-nav .nav-bar');
+    const navToggle = document.getElementById('navToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    // Hysteresis thresholds to prevent flicker at the boundary
+    const EXPAND_THRESHOLD = 60;   // expand when <= this
+    const SHRINK_THRESHOLD = 120;  // shrink when >= this
+    let isShrunk = false;
+    let ticking = false;
+
+    const updateNav = () => {
+      const y = window.scrollY || 0;
+      if (!isShrunk && y >= SHRINK_THRESHOLD) {
+        navBar?.classList.add('shrink');
+        isShrunk = true;
+      } else if (isShrunk && y <= EXPAND_THRESHOLD) {
+        navBar?.classList.remove('shrink');
+        isShrunk = false;
+      }
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateNav);
+        ticking = true;
+      }
+    };
+
+    // Initial state
+    updateNav();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    navToggle?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('hidden');
+    });
+  });
+</script>

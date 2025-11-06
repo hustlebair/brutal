@@ -1,6 +1,10 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import UnoCSS from 'unocss/astro';
+import { fileURLToPath } from 'url';
+import { resolve } from 'path';
+
+const root = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
   // used to generate images
@@ -13,6 +17,14 @@ export default defineConfig({
   trailingSlash: 'ignore',
   integrations: [sitemap(), UnoCSS({ injectReset: true })],
   vite: {
+    resolve: {
+      alias: {
+        '@components': resolve(root, 'src/components'),
+        '@layouts': resolve(root, 'src/layouts'),
+        '@pages': resolve(root, 'src/pages'),
+        '@data': resolve(root, 'src/data'),
+      },
+    },
     optimizeDeps: {
       exclude: ['@resvg/resvg-js'],
     },
