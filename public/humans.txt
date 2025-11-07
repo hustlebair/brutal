@@ -1,6 +1,5 @@
-## Brutal Theme ##
+## Highest Liked ##
 
-All development & Content by Elian Van Cutsem
+All development & Content by Highest Liked
 
-- email: hello@elian.codes
-- website: www.elian.codes
+- website: www.highestliked.com

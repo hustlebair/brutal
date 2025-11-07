@@ -5,30 +5,24 @@ import { products, type Product } from '@data/products';
 ---
 
 <Layout
-  title="Highest Liked – Viral Products, TikTok Finds & Amazon Cool Stuff"
+  title="Highest Liked: The Internet's Wishlist"
   pageTitle="HighestLiked"
-  description="Discover the coolest gadgets, gifts, and viral products trending across TikTok and Amazon. Curated daily by @highestliked."
+  description="Discover the internet's wishlist — a curated collection of the coolest gadgets, viral Amazon finds, and trending TikTok products. From clever home upgrades to impulse-buy gifts, Highest Liked showcases what everyone's talking about online."
+  ogImage={new URL('/og-image.jpg', Astro.url)}
 >
   <main class="bg-white">
     <!-- Hero Section -->
     <section class="px-4 md:px-8 py-12 md:py-20 text-center">
       <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-black mb-4 md:mb-6 leading-tight">
-        Discover The Internet's<br class="hidden md:block" />
-        <span class="text-[#FF9900]">Coolest Viral Products</span>
+        The Internet's <span class="text-[#FF9900]">Wishlist</span>
       </h1>
       <p class="text-lg md:text-xl lg:text-2xl text-gray-700 max-w-3xl mx-auto mb-8 md:mb-12 leading-relaxed">
-        From TikTok trends to Amazon gems — the most Highest-Liked finds, all in one place.
+        The Highest-Liked gadgets, gifts, and viral products.
       </p>
-      <a
-        href="#products"
-        class="inline-block bg-[#FF9900] text-black px-8 py-4 rounded-xl font-bold text-lg md:text-xl hover:bg-[#ff8800] hover:shadow-lg transition-all duration-300 hover:scale-105"
-      >
-        Browse All Finds ↓
-      </a>
     </section>
 
     <!-- Product Grid Section -->
-    <section id="products" class="px-4 md:px-8 py-8 md:py-16">
+    <section id="products" class="px-4 md:px-8 py-8">
       <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {products.map((product: Product) => (
@@ -37,8 +31,7 @@ import { products, type Product } from '@data/products';
               description={product.description}
               image={product.image}
               url={product.url}
-              category={product.category}
-              likes={product.likes}
+              primaryCategory={product.primaryCategory}
             />
           ))}
         </div>

@@ -8,13 +8,16 @@ interface Props {
   ogImage?: URL;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://www.highestliked.com');
 
 if (Astro.props.ogImage === undefined) {
-  Astro.props.ogImage = new URL('/v1/generate/og/default.png', Astro.url);
+  Astro.props.ogImage = new URL('/og-image.jpg', Astro.site || 'https://www.highestliked.com');
 }
 
 const { title, description, ogImage } = Astro.props;
+
+// Ensure og:image is a full URL
+const ogImageURL = ogImage;
 ---
 
 <head>
@@ -36,13 +39,13 @@ const { title, description, ogImage } = Astro.props;
   <meta property='og:url' content={canonicalURL} />
   <meta property='og:title' content={title} />
   <meta property='og:description' content={description} />
-  <meta property='og:image' content={ogImage} />
+  <meta property='og:image' content={ogImageURL} />
 
-  <meta property='twitter:card' content='summary_large_image' />
-  <meta property='twitter:url' content={canonicalURL} />
-  <meta property='twitter:title' content={title} />
-  <meta property='twitter:description' content={description} />
-  <meta property='twitter:image' content={ogImage} />
+  <meta name='twitter:card' content='summary_large_image' />
+  <meta name='twitter:url' content={canonicalURL} />
+  <meta name='twitter:title' content={title} />
+  <meta name='twitter:description' content={description} />
+  <meta name='twitter:image' content={ogImageURL} />
 
   <link rel='canonical' href={canonicalURL} />
   <link rel='icon' type='image/svg' href='/favicon.svg' />
