@@ -1,0 +1,24 @@
+---
+import AdminGate from '../components/admin/AdminGate.tsx';
+import AdminQuickAdd from '../components/admin/AdminQuickAdd.tsx';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin – HighestLiked</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <AdminGate client:load>
+      <AdminQuickAdd client:load />
+    </AdminGate>
+  </body>
+</html>
+

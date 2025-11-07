@@ -15,6 +15,22 @@ const blogCollection = defineCollection({
     }),
 });
 
+const productsCollection = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: "./src/data/products" }),
+  schema: z.object({
+    name: z.string(),
+    description: z.string(),
+    image: z.string().url(),
+    url: z.string().url(),
+    categories: z.array(z.string()),
+    primaryCategory: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    price: z.string().optional(),
+    featured: z.boolean().optional().default(false),
+  }),
+});
+
 export const collections = {
   blog: blogCollection,
+  products: productsCollection,
 };

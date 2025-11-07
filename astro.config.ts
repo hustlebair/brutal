@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import UnoCSS from 'unocss/astro';
+import react from '@astrojs/react';
 import { fileURLToPath } from 'url';
 import { resolve } from 'path';
 
@@ -15,7 +16,7 @@ export default defineConfig({
       ? `https://${process.env.VERCEL_URL}/`
       : 'https://localhost:3000/',
   trailingSlash: 'ignore',
-  integrations: [sitemap(), UnoCSS({ injectReset: true })],
+  integrations: [react(), sitemap(), UnoCSS({ injectReset: true })],
   vite: {
     resolve: {
       alias: {
@@ -23,6 +24,7 @@ export default defineConfig({
         '@layouts': resolve(root, 'src/layouts'),
         '@pages': resolve(root, 'src/pages'),
         '@data': resolve(root, 'src/data'),
+        '@utils': resolve(root, 'src/utils'),
       },
     },
     optimizeDeps: {
