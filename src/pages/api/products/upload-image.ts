@@ -2,6 +2,14 @@ import type { APIRoute } from 'astro';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 
+// Test route - can be removed later
+export const GET: APIRoute = async () => {
+  return new Response(JSON.stringify({ message: 'Upload image endpoint is working' }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' },
+  });
+};
+
 export const POST: APIRoute = async ({ request }) => {
   // Security check - verify admin access via referer
   const referer = request.headers.get('referer');

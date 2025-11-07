@@ -66,6 +66,15 @@ const staticProducts: Product[] = [
     primaryCategory: "🔥 Trending",
     tags: ["electronics", "gifts-for-her", "gifts-for-him", "under-30"],
   },
+  {
+    name: "Morf Fidget Worm Toy",
+    description: "The Morf Fidget Worm flexes, collapses, and twists for endless play. A fun versatile slug toy designed to keep hands busy, minds calm, and focus sharp wherever you are.",
+    image: "/products/Morf.jpg",
+    url: "https://amzn.to/4qN06vx",
+    categories: ["🔥 Trending"],
+    primaryCategory: "🔥 Trending",
+    tags: ["gifts-for-her", "gifts-for-him", "under-30"],
+  },
 ];
 
 // Load products from markdown files (content collection)

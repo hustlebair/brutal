@@ -138,9 +138,22 @@ export default function AdminQuickAdd() {
         body: formData,
       });
 
+      if (!response.ok) {
+        const errorText = await response.text();
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch {
+          errorData = { error: `Server error: ${response.status} ${response.statusText}` };
+        }
+        showToast(`Error: ${errorData.error || 'Failed to upload image'}`);
+        setImagePreview(null);
+        return;
+      }
+
       const result = await response.json();
 
-      if (response.ok) {
+      if (result.success) {
         // Update draft with the uploaded image path
         const imagePath = result.path;
         updateDraft('image', imagePath);
@@ -152,7 +165,8 @@ export default function AdminQuickAdd() {
         setImagePreview(null);
       }
     } catch (error: any) {
-      showToast(`Error: ${error.message || 'Failed to upload image'}`);
+      console.error('Upload error:', error);
+      showToast(`Error: ${error.message || 'Failed to upload image. Make sure the dev server is running.'}`);
       setImagePreview(null);
     } finally {
       setUploadingImage(false);
