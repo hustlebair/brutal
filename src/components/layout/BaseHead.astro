@@ -18,6 +18,9 @@ const { title, description, ogImage } = Astro.props;
 
 // Ensure og:image is a full URL
 const ogImageURL = ogImage;
+
+// Twitter image - use specific Twitter image
+const twitterImageURL = new URL('/highestliked-twitter.png', Astro.site || 'https://www.highestliked.com');
 ---
 
 <head>
@@ -45,7 +48,7 @@ const ogImageURL = ogImage;
   <meta name='twitter:url' content={canonicalURL} />
   <meta name='twitter:title' content={title} />
   <meta name='twitter:description' content={description} />
-  <meta name='twitter:image' content={ogImageURL} />
+  <meta name='twitter:image' content={twitterImageURL} />
 
   <link rel='canonical' href={canonicalURL} />
   <link rel='icon' type='image/svg' href='/favicon.svg' />
