@@ -69,7 +69,7 @@ const staticProducts: Product[] = [
   {
     name: "Morf Fidget Worm Toy",
     description: "The Morf Fidget Worm flexes, collapses, and twists for endless play. A fun versatile slug toy designed to keep hands busy, minds calm, and focus sharp wherever you are.",
-    image: "/products/morf.jpg",
+    image: "/morf.jpg",
     url: "https://amzn.to/4qN06vx",
     categories: ["🔥 Trending"],
     primaryCategory: "🔥 Trending",
