@@ -39,8 +39,8 @@ export default function AdminQuickAdd() {
   const [tagInput, setTagInput] = useState('');
   const [markdown, setMarkdown] = useState('');
   const [toast, setToast] = useState('');
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const IMAGE_BASE_URL = 'https://www.highestliked.com/';
 
   const showToast = (message: string) => {
     setToast(message);
@@ -102,77 +102,27 @@ export default function AdminQuickAdd() {
     }
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
-    if (!allowedTypes.includes(file.type)) {
-      showToast('Invalid file type. Only images are allowed.');
-      return;
+  const handleImageInputChange = (value: string) => {
+    // If user enters a full URL, use it as-is
+    // Otherwise, prepend the base URL
+    let fullUrl = value;
+    if (value && !value.startsWith('http://') && !value.startsWith('https://')) {
+      // Remove leading slash if present
+      const cleanValue = value.startsWith('/') ? value.slice(1) : value;
+      fullUrl = `${IMAGE_BASE_URL}${cleanValue}`;
     }
+    updateDraft('image', fullUrl);
+    setImagePreview(fullUrl);
+  };
 
-    // Validate file size (max 10MB)
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    if (file.size > maxSize) {
-      showToast('File too large. Maximum size is 10MB.');
-      return;
+  const getImageInputValue = (): string => {
+    const image = draft.image || '';
+    // If it starts with the base URL, return just the filename part
+    if (image.startsWith(IMAGE_BASE_URL)) {
+      return image.replace(IMAGE_BASE_URL, '');
     }
-
-    // Show preview immediately
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setImagePreview(event.target?.result as string);
-    };
-    reader.readAsDataURL(file);
-
-    // Upload file
-    setUploadingImage(true);
-    try {
-      const formData = new FormData();
-      formData.append('image', file);
-
-      const response = await fetch('/api/products/upload-image', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        let errorData;
-        try {
-          errorData = JSON.parse(errorText);
-        } catch {
-          errorData = { error: `Server error: ${response.status} ${response.statusText}` };
-        }
-        showToast(`Error: ${errorData.error || 'Failed to upload image'}`);
-        setImagePreview(null);
-        return;
-      }
-
-      const result = await response.json();
-
-      if (result.success) {
-        // Update draft with the uploaded image path
-        const imagePath = result.path;
-        updateDraft('image', imagePath);
-        // Update preview to use the uploaded image URL
-        setImagePreview(imagePath);
-        showToast('Image uploaded successfully!');
-      } else {
-        showToast(`Error: ${result.error || 'Failed to upload image'}`);
-        setImagePreview(null);
-      }
-    } catch (error: any) {
-      console.error('Upload error:', error);
-      showToast(`Error: ${error.message || 'Failed to upload image. Make sure the dev server is running.'}`);
-      setImagePreview(null);
-    } finally {
-      setUploadingImage(false);
-      // Reset file input
-      e.target.value = '';
-    }
+    // Otherwise return as-is (might be a full external URL)
+    return image;
   };
 
   const validate = (): boolean => {
@@ -364,35 +314,22 @@ export default function AdminQuickAdd() {
               />
             </div>
 
-            {/* Image Upload */}
+            {/* Image URL */}
             <div>
               <label className="block font-semibold mb-2">
                 Product Image <span className="text-red-500">*</span>
               </label>
               <div className="space-y-3">
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="px-4 py-2 border-2 border-gray-300 rounded-lg bg-gray-50 font-semibold whitespace-nowrap">
+                    {IMAGE_BASE_URL}
+                  </span>
                   <input
-                    type="file"
-                    id="image-upload"
-                    accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor="image-upload"
-                    className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-[#FF9900] transition-colors text-center font-semibold bg-gray-50"
-                  >
-                    {uploadingImage ? 'Uploading...' : '📤 Upload Image'}
-                  </label>
-                  <input
-                    type="url"
-                    value={draft.image || ''}
-                    onChange={(e) => {
-                      updateDraft('image', e.target.value);
-                      setImagePreview(e.target.value || null);
-                    }}
+                    type="text"
+                    value={getImageInputValue()}
+                    onChange={(e) => handleImageInputChange(e.target.value)}
                     className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#FF9900] focus:outline-none"
-                    placeholder="Or enter image URL"
+                    placeholder="filename.jpg"
                   />
                 </div>
                 {(imagePreview || draft.image) && (
@@ -574,7 +511,15 @@ export default function AdminQuickAdd() {
             {/* Markdown Output */}
             {markdown && (
               <div className="mt-6">
-                <label className="block font-semibold mb-2">Generated Markdown:</label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block font-semibold">Generated Markdown:</label>
+                  <button
+                    onClick={copyToClipboard}
+                    className="px-4 py-2 bg-black text-white rounded-lg font-bold hover:bg-gray-800 transition-colors"
+                  >
+                    Copy
+                  </button>
+                </div>
                 <pre className="bg-gray-100 p-4 rounded-lg overflow-auto text-sm max-h-64">
                   {markdown}
                 </pre>

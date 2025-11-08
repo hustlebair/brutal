@@ -76,6 +76,15 @@ const staticProducts: Product[] = [
     primaryCategory: "🏠 Home & Office",
     tags: ["gifts-for-him", "christmas", "under-50", "tiktok-finds"],
   },
+  {
+    name: "Corner Lamp Ambient Vibe Light",
+    description: "LED floor lamp offers a wide range of colors to suit your mood and preference. Choose from over 16 million vibrant colors or adjust the brightness to create the perfect ambiance for any room in your home.",
+    image: "https://www.highestliked.com/cornerlamp.jpg",
+    url: "https://amzn.to/4hVrxiS",
+    categories: ["🏠 Home & Office", "🔥 Trending"],
+    primaryCategory: "🏠 Home & Office",
+    tags: ["gifts-for-her", "gifts-for-him", "home-decor", "viral"],
+  },
 ];
 
 // Helper function to normalize image URLs
