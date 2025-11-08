@@ -58,6 +58,15 @@ const staticProducts: Product[] = [
     primaryCategory: "🚀 TikTok Finds",
     tags: ["gifts-for-him", "gifts-for-her", "under-50", "viral", "christmas"],
   },
+  {
+    name: "Mini 4K Portable Projector",
+    description: "Turn any wall into a home theater! Project your desktop, PC, Gaming Console or laptop with HDMI. 180 degree rotation and built in web apps like Netflix.",
+    image: "https://www.highestliked.com/projector.jpg",
+    url: "https://amzn.to/47Oi1cC",
+    categories: ["🏠 Home & Office"],
+    primaryCategory: "🏠 Home & Office",
+    tags: ["gifts-for-him", "under-50", "tiktok-finds", "birthday"],
+  },
 ];
 
 // Helper function to normalize image URLs

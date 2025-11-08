@@ -564,34 +564,10 @@ export default function AdminQuickAdd() {
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-2 pt-4">
               <button
-                onClick={publishProduct}
-                className="px-6 py-3 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 transition-colors"
-              >
-                🚀 Publish Product
-              </button>
-              <button
                 onClick={generateMarkdown}
                 className="px-6 py-3 bg-[#FF9900] text-black rounded-lg font-bold hover:bg-[#ff8800] transition-colors"
               >
                 Generate Markdown
-              </button>
-              <button
-                onClick={copyToClipboard}
-                className="px-6 py-3 bg-black text-white rounded-lg font-bold hover:bg-gray-800 transition-colors"
-              >
-                Copy
-              </button>
-              <button
-                onClick={downloadMarkdown}
-                className="px-6 py-3 bg-gray-700 text-white rounded-lg font-bold hover:bg-gray-600 transition-colors"
-              >
-                Download .md
-              </button>
-              <button
-                onClick={clearForm}
-                className="px-6 py-3 bg-gray-200 text-black rounded-lg font-bold hover:bg-gray-300 transition-colors"
-              >
-                Clear
               </button>
             </div>
 
