@@ -136,6 +136,24 @@ const { pageTitle } = Astro.props;
       "MORF" 15,
       "SHLN" 50;
   }
+  
+  /* iOS Safari specific - force gradient since color fonts don't work */
+  @supports (-webkit-touch-callout: none) {
+    .honk-logo {
+      background: linear-gradient(135deg, #FF9900 0%, #ff6600 50%, #FF9900 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #FF9900; /* Fallback solid color if gradient doesn't work */
+    }
+  }
+  
+  /* For non-iOS browsers that support color fonts, let the font's native colors show */
+  @supports (font-variation-settings: normal) and (not (-webkit-touch-callout: none)) {
+    .honk-logo {
+      /* Let the color font display its native colors */
+    }
+  }
 
   .site-nav .nav-bar.shrink {
     padding-top: 0.5rem; /* py-2 */

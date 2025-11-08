@@ -4,6 +4,7 @@
 
 <div class="particles-background" aria-hidden="true">
   <canvas id="particles-canvas"></canvas>
+  <div class="mobile-gradient"></div>
 </div>
 
 <script>
@@ -11,6 +12,9 @@
     if (typeof window === 'undefined') return;
     
     function initParticles() {
+      // Only initialize particles on desktop
+      if (window.innerWidth < 768) return;
+      
       const canvas = document.getElementById('particles-canvas') as HTMLCanvasElement;
       if (!canvas) return;
     
@@ -90,7 +94,17 @@
       init();
       animate();
       
-      window.addEventListener('resize', init);
+      window.addEventListener('resize', () => {
+        // Reinitialize if switching between mobile/desktop
+        if (window.innerWidth >= 768) {
+          init();
+        } else {
+          // Stop animation on mobile
+          if (ctx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+        }
+      });
     }
     
     if (document.readyState === 'loading') {
@@ -113,6 +127,34 @@
   #particles-canvas {
     width: 100%;
     height: 100%;
+    display: none;
+  }
+  
+  .mobile-gradient {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 200, 150, 0.15) 0%, rgba(255, 150, 150, 0.1) 100%);
+  }
+  
+  /* Desktop: Show particles, hide gradient */
+  @media (min-width: 768px) {
+    #particles-canvas {
+      display: block;
+    }
+    .mobile-gradient {
+      display: none;
+    }
+  }
+  
+  /* Mobile: Hide particles, show gradient */
+  @media (max-width: 767px) {
+    #particles-canvas {
+      display: none;
+    }
+    .mobile-gradient {
+      display: block;
+    }
   }
 </style>
 
