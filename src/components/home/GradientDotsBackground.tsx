@@ -55,42 +55,56 @@ export default function GradientDotsBackground({
   }, [spacing, hexSpacing]);
 
   return (
-    <div
-      ref={containerRef}
-      className="gradient-dots-background"
-      style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundColor,
-        backgroundImage: `
-          radial-gradient(circle at 50% 50%, transparent 1.5px, ${backgroundColor} 0 ${dotSize}px, transparent ${dotSize}px),
-          radial-gradient(circle at 50% 50%, transparent 1.5px, ${backgroundColor} 0 ${dotSize}px, transparent ${dotSize}px),
-          radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.25), transparent 60%),
-          radial-gradient(circle at 50% 50%, rgba(255, 255, 0, 0.25), transparent 60%),
-          radial-gradient(circle at 50% 50%, rgba(0, 255, 0, 0.25), transparent 60%),
-          radial-gradient(ellipse at 50% 50%, rgba(0, 0, 255, 0.25), transparent 60%)
-        `,
-        opacity: 0.75,
-        backgroundSize: `
-          ${spacing}px ${hexSpacing}px,
-          ${spacing}px ${hexSpacing}px,
-          200% 200%,
-          200% 200%,
-          200% 200%,
-          200% ${hexSpacing}px
-        `,
-        backgroundPosition: `
-          0px 0px, ${spacing / 2}px ${hexSpacing / 2}px,
-          0% 0%,
-          0% 0%,
-          0% 0%,
-          0px 0px
-        `,
-        animation: `gradientDotsMove ${duration}s linear infinite, gradientDotsHue ${colorCycleDuration}s linear infinite`,
-        pointerEvents: 'none',
-        zIndex: 0,
-      }}
-    />
+    <>
+      <div
+        ref={containerRef}
+        className="gradient-dots-background"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundColor,
+          backgroundImage: `
+            radial-gradient(circle at 50% 50%, transparent 1.5px, ${backgroundColor} 0 ${dotSize}px, transparent ${dotSize}px),
+            radial-gradient(circle at 50% 50%, transparent 1.5px, ${backgroundColor} 0 ${dotSize}px, transparent ${dotSize}px),
+            radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.25), transparent 60%),
+            radial-gradient(circle at 50% 50%, rgba(255, 255, 0, 0.25), transparent 60%),
+            radial-gradient(circle at 50% 50%, rgba(0, 255, 0, 0.25), transparent 60%),
+            radial-gradient(ellipse at 50% 50%, rgba(0, 0, 255, 0.25), transparent 60%)
+          `,
+          opacity: 0.75,
+          backgroundSize: `
+            ${spacing}px ${hexSpacing}px,
+            ${spacing}px ${hexSpacing}px,
+            200% 200%,
+            200% 200%,
+            200% 200%,
+            200% ${hexSpacing}px
+          `,
+          backgroundPosition: `
+            0px 0px, ${spacing / 2}px ${hexSpacing / 2}px,
+            0% 0%,
+            0% 0%,
+            0% 0%,
+            0px 0px
+          `,
+          animation: `gradientDotsMove ${duration}s linear infinite, gradientDotsHue ${colorCycleDuration}s linear infinite`,
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '30px',
+          background: `linear-gradient(to bottom, ${backgroundColor}, transparent)`,
+          pointerEvents: 'none',
+          zIndex: 1,
+        }}
+      />
+    </>
   );
 }
 
