@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import UnoCSS from 'unocss/astro';
 import react from '@astrojs/react';
-import vercel from '@astrojs/vercel/serverless';
+import vercel from '@astrojs/vercel';
 import { fileURLToPath } from 'url';
 import { resolve } from 'path';
 
@@ -16,7 +16,7 @@ export default defineConfig({
       : process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}/`
       : 'https://localhost:3000/',
-  output: 'hybrid', // Enable hybrid mode for API routes
+  output: 'server', // Enable server mode for API routes
   adapter: vercel(), // Use Vercel adapter for serverless functions
   trailingSlash: 'ignore',
   integrations: [react(), sitemap(), UnoCSS({ injectReset: true })],
