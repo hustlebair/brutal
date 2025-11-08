@@ -39,41 +39,24 @@ export function getAllCategories(products: Product[]): string[] {
 
 // Static products (legacy - can be migrated to markdown files)
 const staticProducts: Product[] = [
-  {
-    name: "Mini Fridge for Your Desk",
-    description: "Keep your drinks cold without leaving your desk. The ultimate WFH flex that everyone's talking about.",
-    image: "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?w=800&h=800&fit=crop",
-    url: "https://amazon.com",
-    categories: ["🏠 Home & Office", "🔥 Trending"],
-    primaryCategory: "🏠 Home & Office",
-    tags: ["desk-accessories", "gifts-for-him", "office-supplies"],
-  },
-  {
-    name: "Electric Lighter That Never Runs Out",
-    description: "No more running out of fuel. This rechargeable lighter is the coolest thing you didn't know you needed.",
-    image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=800&fit=crop",
-    url: "https://amazon.com",
-    categories: ["🎁 Funny Gifts", "🔥 Trending"],
-    primaryCategory: "🎁 Funny Gifts",
-    tags: ["gifts-for-him", "anniversary", "birthday", "under-50"],
-  },
-  {
-    name: "Phone Case with PopSocket Built-In",
-    description: "The case that makes your phone easier to hold and impossible to drop. TikTok made this one famous.",
-    image: "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=800&h=800&fit=crop",
-    url: "https://amazon.com",
-    categories: ["🔥 Trending"],
-    primaryCategory: "🔥 Trending",
-    tags: ["electronics", "gifts-for-her", "gifts-for-him", "under-30"],
-  },
+  
   {
     name: "Morf Fidget Worm Toy",
     description: "The Morf Fidget Worm flexes, collapses, and twists for endless play. A fun versatile slug toy designed to keep hands busy, minds calm, and focus sharp wherever you are.",
-    image: "/morf.jpg",
+    image: "https://www.highestliked.com/morf.jpg",
     url: "https://amzn.to/4qN06vx",
     categories: ["🔥 Trending"],
     primaryCategory: "🔥 Trending",
     tags: ["gifts-for-her", "gifts-for-him", "under-30"],
+  },
+  {
+    name: "Loop Lasso NANO",
+    description: "The Ultimate Interactive Light Toy - The Loop Lasso combines physics and technology to shoot a glowing string at over 40+ mph to create a mind-blowing levitating effect. Move your hand and watch it as it follows your every motion through the air to create colorful, illuminated shapes.",
+    image: "https://www.highestliked.com/looplasso.jpg",
+    url: "https://amzn.to/47uwo6X",
+    categories: ["🔥 Trending", "🚀 TikTok Finds"],
+    primaryCategory: "🚀 TikTok Finds",
+    tags: ["gifts-for-him", "gifts-for-her", "under-50", "viral", "christmas"],
   },
 ];
 
