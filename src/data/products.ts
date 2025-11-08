@@ -77,15 +77,36 @@ const staticProducts: Product[] = [
   },
 ];
 
+// Helper function to normalize image URLs
+// Converts relative paths to absolute URLs for production compatibility
+function normalizeImageUrl(imageUrl: string, baseUrl?: string): string {
+  // If it's already a full URL, return as-is
+  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+    return imageUrl;
+  }
+  
+  // If it's a relative path starting with /, convert to absolute URL
+  if (imageUrl.startsWith('/')) {
+    // Use provided baseUrl, or default to production site
+    const siteUrl = baseUrl || 'https://www.highestliked.com';
+    // Ensure baseUrl doesn't have trailing slash
+    const cleanBaseUrl = siteUrl.replace(/\/$/, '');
+    return `${cleanBaseUrl}${imageUrl}`;
+  }
+  
+  // Otherwise return as-is (might be a relative path without leading /)
+  return imageUrl;
+}
+
 // Load products from markdown files (content collection)
-export async function getProductsFromFiles(): Promise<Product[]> {
+export async function getProductsFromFiles(baseUrl?: string): Promise<Product[]> {
   try {
     const { getCollection } = await import('astro:content');
     const productEntries = await getCollection('products');
     return productEntries.map(entry => ({
       name: entry.data.name,
       description: entry.data.description,
-      image: entry.data.image,
+      image: normalizeImageUrl(entry.data.image, baseUrl),
       url: entry.data.url,
       categories: entry.data.categories,
       primaryCategory: entry.data.primaryCategory,
@@ -101,9 +122,14 @@ export async function getProductsFromFiles(): Promise<Product[]> {
 
 // Combined products (static + from files)
 // Note: In Astro pages, use getProducts() instead of products array
-export async function getProducts(): Promise<Product[]> {
-  const fileProducts = await getProductsFromFiles();
-  return [...staticProducts, ...fileProducts];
+export async function getProducts(baseUrl?: string): Promise<Product[]> {
+  const fileProducts = await getProductsFromFiles(baseUrl);
+  // Normalize static product images too
+  const normalizedStaticProducts = staticProducts.map(product => ({
+    ...product,
+    image: normalizeImageUrl(product.image, baseUrl),
+  }));
+  return [...normalizedStaticProducts, ...fileProducts];
 }
 
 // For backward compatibility, export static products
