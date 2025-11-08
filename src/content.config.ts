@@ -20,7 +20,7 @@ const productsCollection = defineCollection({
   schema: z.object({
     name: z.string(),
     description: z.string(),
-    image: z.string().url(),
+    image: z.string(), // Changed from z.string().url() to accept both URLs and relative paths
     url: z.string().url(),
     categories: z.array(z.string()),
     primaryCategory: z.string().optional(),

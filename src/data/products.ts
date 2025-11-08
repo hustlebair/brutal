@@ -78,20 +78,18 @@ const staticProducts: Product[] = [
 ];
 
 // Helper function to normalize image URLs
-// Converts relative paths to absolute URLs for production compatibility
-function normalizeImageUrl(imageUrl: string, baseUrl?: string): string {
+// Keeps relative paths as-is (Astro serves /public/ files correctly)
+// Only handles edge cases for non-standard paths
+function normalizeImageUrl(imageUrl: string): string {
   // If it's already a full URL, return as-is
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
     return imageUrl;
   }
   
-  // If it's a relative path starting with /, convert to absolute URL
+  // If it's a relative path starting with /, keep it as-is
+  // Astro will serve files from /public/ correctly in both dev and production
   if (imageUrl.startsWith('/')) {
-    // Use provided baseUrl, or default to production site
-    const siteUrl = baseUrl || 'https://www.highestliked.com';
-    // Ensure baseUrl doesn't have trailing slash
-    const cleanBaseUrl = siteUrl.replace(/\/$/, '');
-    return `${cleanBaseUrl}${imageUrl}`;
+    return imageUrl;
   }
   
   // Otherwise return as-is (might be a relative path without leading /)
@@ -99,14 +97,14 @@ function normalizeImageUrl(imageUrl: string, baseUrl?: string): string {
 }
 
 // Load products from markdown files (content collection)
-export async function getProductsFromFiles(baseUrl?: string): Promise<Product[]> {
+export async function getProductsFromFiles(): Promise<Product[]> {
   try {
     const { getCollection } = await import('astro:content');
     const productEntries = await getCollection('products');
     return productEntries.map(entry => ({
       name: entry.data.name,
       description: entry.data.description,
-      image: normalizeImageUrl(entry.data.image, baseUrl),
+      image: normalizeImageUrl(entry.data.image),
       url: entry.data.url,
       categories: entry.data.categories,
       primaryCategory: entry.data.primaryCategory,
@@ -122,12 +120,12 @@ export async function getProductsFromFiles(baseUrl?: string): Promise<Product[]>
 
 // Combined products (static + from files)
 // Note: In Astro pages, use getProducts() instead of products array
-export async function getProducts(baseUrl?: string): Promise<Product[]> {
-  const fileProducts = await getProductsFromFiles(baseUrl);
+export async function getProducts(): Promise<Product[]> {
+  const fileProducts = await getProductsFromFiles();
   // Normalize static product images too
   const normalizedStaticProducts = staticProducts.map(product => ({
     ...product,
-    image: normalizeImageUrl(product.image, baseUrl),
+    image: normalizeImageUrl(product.image),
   }));
   return [...normalizedStaticProducts, ...fileProducts];
 }

@@ -3,9 +3,7 @@ import Layout from '@layouts/Default.astro';
 import ProductCard from '@components/home/ProductCard.astro';
 import { getProducts, type Product } from '@data/products';
 
-// Get base URL for image normalization (works in both dev and production)
-const baseUrl = Astro.site?.toString() || new URL(Astro.url.origin).toString();
-const allProducts = await getProducts(baseUrl);
+const allProducts = await getProducts();
 ---
 
 <Layout
