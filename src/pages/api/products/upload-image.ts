@@ -10,17 +10,8 @@ export const GET: APIRoute = async () => {
   });
 };
 
-export const POST: APIRoute = async ({ request, cookies }) => {
-  // Security check - verify admin session
-  const session = cookies.get('admin_session');
-  const isDev = import.meta.env.DEV;
-
-  if (!isDev && !session?.value) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
+export const POST: APIRoute = async ({ request }) => {
+  // No authentication required - admin is open
 
   try {
     const formData = await request.formData();
