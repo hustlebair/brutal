@@ -4,14 +4,13 @@ import { join } from 'path';
 import { generateFilename } from '@utils/makeProductMarkdown';
 import type { Product } from '@data/products';
 
-export const POST: APIRoute = async ({ request }) => {
-  // Security check - verify admin access via referer
-  // Client-side localStorage check is handled by AdminGate component
-  const referer = request.headers.get('referer');
+export const POST: APIRoute = async ({ request, cookies }) => {
+  // Security check - verify admin session
+  const session = cookies.get('admin_session');
   const isDev = import.meta.env.DEV;
   
-  // Allow in dev mode, or if referer includes /admin
-  if (!isDev && referer && !referer.includes('/admin')) {
+  // Allow in dev mode, or if valid admin session exists
+  if (!isDev && !session?.value) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },

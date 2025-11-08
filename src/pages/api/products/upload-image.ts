@@ -10,13 +10,12 @@ export const GET: APIRoute = async () => {
   });
 };
 
-export const POST: APIRoute = async ({ request }) => {
-  // Security check - verify admin access via referer
-  const referer = request.headers.get('referer');
+export const POST: APIRoute = async ({ request, cookies }) => {
+  // Security check - verify admin session
+  const session = cookies.get('admin_session');
   const isDev = import.meta.env.DEV;
-  
-  // Allow in dev mode, or if referer includes /admin
-  if (!isDev && referer && !referer.includes('/admin')) {
+
+  if (!isDev && !session?.value) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },

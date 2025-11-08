@@ -12,22 +12,30 @@ pnpm add react react-dom @astrojs/react
 yarn add react react-dom @astrojs/react
 ```
 
-## Environment Variables (Optional)
+## Environment Variables (Required)
 
-To add passcode protection, create a `.env` file in the project root:
+Create a `.env` file in the project root with your admin credentials:
 
 ```
-PUBLIC_ADMIN_PASS=your-secret-passcode-here
+ADMIN_USERNAME=your-username
+ADMIN_PASSWORD=your-secure-password
 ```
+
+**Important:** 
+- Never commit the `.env` file to version control
+- Use a strong, unique password
+- In production, set these as environment variables in your hosting platform
 
 ## Usage
 
 1. **Access the admin tool:**
-   - Visit `/admin?admin=on` to enable admin mode
-   - Or set `localStorage.hl_admin = 'true'` in browser console
+   - Visit `/admin` in your browser
+   - You'll be prompted to enter your username and password
+   - After successful login, you'll have access to the admin panel
 
 2. **Adding a product:**
    - Fill in product details (required fields marked with *)
+   - Upload an image or enter an image URL
    - Select categories (click to toggle)
    - Choose a primary category
    - Add tags (type and press Enter, or click suggested tags)
@@ -39,9 +47,9 @@ PUBLIC_ADMIN_PASS=your-secret-passcode-here
    - Click "Generate Markdown" to create the front-matter (for manual file creation)
    - Use "Copy" or "Download .md" to save the file manually
 
-4. **Disable admin mode:**
-   - Click "Disable Admin" button in the admin bar
-   - Or visit `/admin?admin=off`
+4. **Logout:**
+   - Click the "Logout" button in the admin bar
+   - Your session will be cleared and you'll need to login again
 
 ## How It Works
 
@@ -55,14 +63,19 @@ PUBLIC_ADMIN_PASS=your-secret-passcode-here
 ## Security Notes
 
 - The admin page is not linked from any public navigation
-- Admin access is controlled via localStorage and URL params
-- Optional passcode protection via `PUBLIC_ADMIN_PASS` environment variable
-- In production, ensure `PUBLIC_ADMIN_PASS` is set for additional security
+- Admin access requires username and password authentication
+- Sessions are stored in httpOnly cookies (secure and not accessible via JavaScript)
+- API routes are protected and require valid admin session
+- In production, ensure `ADMIN_USERNAME` and `ADMIN_PASSWORD` are set as environment variables
+- Sessions expire after 24 hours
 
 ## File Structure
 
 - `src/utils/makeProductMarkdown.ts` - Markdown generation utility
-- `src/components/admin/AdminGate.tsx` - Admin access gate component
+- `src/components/admin/AdminGate.tsx` - Admin authentication component
 - `src/components/admin/AdminQuickAdd.tsx` - Main admin form component
 - `src/pages/admin.astro` - Admin page route
+- `src/pages/api/admin/login.ts` - Login API endpoint
+- `src/pages/api/admin/logout.ts` - Logout API endpoint
+- `src/pages/api/admin/check.ts` - Session check endpoint
 
