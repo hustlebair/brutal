@@ -68,7 +68,7 @@ const staticProducts: Product[] = [
     tags: ["gifts-for-him", "under-50", "tiktok-finds", "birthday"],
   },
   {
-    name: "2 in 1 Magnetic Dual Splittable Bluetooth Speaker",
+    name: "2 in 1 Magnetic Splittable Bluetooth Speaker",
     description: "These two speakers can be connected and paired to produce surround sound, providing a 360-degree audio experience. However, when separated, they deliver superior left and right stereo sound, making them ideal for parties. The speakers are user-friendly and offer the option to split them for optimal sound performance.",
     image: "https://www.highestliked.com/2in1speaker.jpg",
     url: "https://amzn.to/3WHyMkC",
@@ -93,6 +93,15 @@ const staticProducts: Product[] = [
     categories: ["🔥 Trending"],
     primaryCategory: "🔥 Trending",
     tags: ["gifts-for-kids", "christmas", "under-50", "tiktok-finds", "electronics", "birthday"],
+  },
+  {
+    name: "2-in-1 Wireless CarPlay Adapter",
+    description: "Enjoy both Wireless CarPlay and HDMI streaming in one compact Car TV Mate Pro. This upgraded wireless CarPlay adapter effortlessly transforms your factory-wired CarPlay into a wireless setup for a clutter-free driving environment. Seamlessly access iPhone apps like Maps, Music, Phone, and Siri directly on your car's display, while maintaining full control through your car's original buttons",
+    image: "https://www.highestliked.com/carplay.jpg",
+    url: "https://amzn.to/4qP4ZEd",
+    categories: ["🧠 Smart Finds"],
+    primaryCategory: "🧠 Smart Finds",
+    tags: ["gifts-for-him", "under-100", "electronics"],
   },
 ];
 
