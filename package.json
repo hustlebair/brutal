@@ -20,6 +20,7 @@
     "@astrojs/react": "^4.4.2",
     "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/vercel": "^9.0.0",
     "@eliancodes/brutal-ui": "^0.2.3",
     "@unocss/astro": "^0.57.7",
     "astro": "^5.14.7",
