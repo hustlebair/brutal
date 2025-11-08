@@ -1,7 +1,7 @@
 ---
 import Layout from '@layouts/Default.astro';
 import ProductCard from '@components/home/ProductCard.astro';
-import ParticlesBackground from '@components/home/ParticlesBackground.astro';
+import GradientDotsBackground from '@components/home/GradientDotsBackground';
 import TagFilter from '@components/home/TagFilter';
 import { getProducts, type Product } from '@data/products';
 
@@ -44,7 +44,7 @@ const allTags = getAllTags(allProducts);
 
     <!-- Product Grid Section -->
     <section id="products" class="px-4 md:px-8 py-8 particles-section">
-      <ParticlesBackground />
+      <GradientDotsBackground client:load />
       <div class="max-w-7xl mx-auto relative z-10">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="product-grid">
           {allProducts.map((product: Product) => (
