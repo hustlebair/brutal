@@ -103,6 +103,15 @@ const staticProducts: Product[] = [
     primaryCategory: "🧠 Smart Finds",
     tags: ["gifts-for-him", "under-100", "electronics"],
   },
+  {
+    name: "Quick Install Window Camera",
+    description: "Immerse yourself in stunning visuals with Girafit's 3MP Ultra-HD camera, utilizing ChroMax Al color night vision to bring day-like clarity even in the darkest nights.",
+    image: "https://www.highestliked.com/windowcamera.jpg",
+    url: "https://amzn.to/4hL2ezG",
+    categories: ["🏠 Home & Office", "🔥 Trending", "🚀 TikTok Finds"],
+    primaryCategory: "🏠 Home & Office",
+    tags: ["gifts-for-him", "under-50", "electronics"],
+  },
 ];
 
 // Helper function to normalize image URLs
