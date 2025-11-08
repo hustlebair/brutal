@@ -14,7 +14,7 @@ const displayCategory = primaryCategory || category;
 
 <article class="product-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] border border-gray-100">
   <div class="px-4 pt-4 pb-2">
-    <h3 class="text-sm md:text-base font-bold text-black truncate" title={name}>
+    <h3 class="dm-sans text-sm md:text-base font-bold text-black truncate" title={name}>
       {name}
     </h3>
   </div>
@@ -27,12 +27,12 @@ const displayCategory = primaryCategory || category;
     />
   </div>
   <div class="p-2.5">
-    <p class="text-gray-700 text-sm md:text-base mb-4 line-clamp-5">
+    <p class="dm-sans text-gray-700 text-sm md:text-base mb-4 line-clamp-5">
       {description}
     </p>
     <div class="flex items-center justify-between">
       {displayCategory && (
-        <span class="text-xs font-semibold text-[#FF9900] uppercase tracking-wide">
+        <span class="dm-sans text-xs font-semibold text-[#FF9900] uppercase tracking-wide">
           {displayCategory}
         </span>
       )}
@@ -40,7 +40,7 @@ const displayCategory = primaryCategory || category;
         href={url}
         target="_blank"
         rel="noopener noreferrer sponsored"
-        class="ml-auto bg-[#FF9900] text-black px-4 py-2 rounded-lg font-bold text-sm md:text-base hover:bg-[#ff8800] hover:shadow-lg transition-all duration-300 hover:scale-105 inline-flex items-center gap-2"
+        class="dm-sans ml-auto bg-[#FF9900] text-black px-4 py-2 rounded-lg font-bold text-sm md:text-base hover:bg-[#ff8800] hover:shadow-lg transition-all duration-300 hover:scale-105 inline-flex items-center gap-2"
       >
         CHECK IT OUT
         <span>→</span>
@@ -52,6 +52,10 @@ const displayCategory = primaryCategory || category;
 <style>
   .product-card {
     animation: fadeIn 0.5s ease-in;
+  }
+
+  .dm-sans {
+    font-family: "DM Sans", sans-serif;
   }
 
   @keyframes fadeIn {

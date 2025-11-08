@@ -85,6 +85,15 @@ const staticProducts: Product[] = [
     primaryCategory: "🏠 Home & Office",
     tags: ["gifts-for-her", "gifts-for-him", "home-decor", "viral"],
   },
+  {
+    name: "The Gecko RC Wall Crawler",
+    description: "A Fresh and Fun Toy Experience: Easily control this realistic gecko as it climbs along the wall toward your family or friends. With its realistic movements, it's perfect for playful pranks and bringing pure, joyful laughter.",
+    image: "https://www.highestliked.com/gecko.jpg",
+    url: "https://amzn.to/4p0n5l9",
+    categories: ["🔥 Trending"],
+    primaryCategory: "🔥 Trending",
+    tags: ["gifts-for-kids", "christmas", "under-50", "tiktok-finds", "electronics", "birthday"],
+  },
 ];
 
 // Helper function to normalize image URLs
