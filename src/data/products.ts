@@ -67,6 +67,15 @@ const staticProducts: Product[] = [
     primaryCategory: "🏠 Home & Office",
     tags: ["gifts-for-him", "under-50", "tiktok-finds", "birthday"],
   },
+  {
+    name: "2 in 1 Magnetic Dual Splittable Bluetooth Speaker",
+    description: "These two speakers can be connected and paired to produce surround sound, providing a 360-degree audio experience. However, when separated, they deliver superior left and right stereo sound, making them ideal for parties. The speakers are user-friendly and offer the option to split them for optimal sound performance.",
+    image: "https://www.highestliked.com/2in1speaker.jpg",
+    url: "https://amzn.to/3WHyMkC",
+    categories: ["🔥 Trending", "🏠 Home & Office"],
+    primaryCategory: "🏠 Home & Office",
+    tags: ["gifts-for-him", "christmas", "under-50", "tiktok-finds"],
+  },
 ];
 
 // Helper function to normalize image URLs
