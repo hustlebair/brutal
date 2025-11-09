@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface TagFilterProps {
   tags: string[];
@@ -15,6 +15,30 @@ function formatTag(tag: string): string {
 
 export default function TagFilter({ tags, onTagSelect }: TagFilterProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [showLeftFade, setShowLeftFade] = useState(false);
+  const [showRightFade, setShowRightFade] = useState(true);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkScroll = () => {
+      if (scrollRef.current) {
+        const target = scrollRef.current;
+        const scrollLeft = target.scrollLeft;
+        const scrollWidth = target.scrollWidth;
+        const clientWidth = target.clientWidth;
+        
+        setShowLeftFade(scrollLeft > 10);
+        setShowRightFade(scrollLeft < scrollWidth - clientWidth - 10);
+      }
+    };
+
+    // Check initial state
+    checkScroll();
+    
+    // Check on resize
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, [tags]);
 
   const handleTagClick = (tag: string) => {
     if (selectedTag === tag) {
@@ -30,12 +54,39 @@ export default function TagFilter({ tags, onTagSelect }: TagFilterProps) {
     }
   };
 
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const scrollLeft = target.scrollLeft;
+    const scrollWidth = target.scrollWidth;
+    const clientWidth = target.clientWidth;
+    
+    setShowLeftFade(scrollLeft > 10);
+    setShowRightFade(scrollLeft < scrollWidth - clientWidth - 10);
+  };
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <style>{`
         .tag-filter-container {
           width: 100%;
-          padding: 0 1rem;
+          padding: 0;
+          position: relative;
+        }
+
+        .tag-filter-wrapper {
+          position: relative;
         }
 
         .tag-filter-scroll {
@@ -43,24 +94,60 @@ export default function TagFilter({ tags, onTagSelect }: TagFilterProps) {
           gap: 0.75rem;
           overflow-x: auto;
           overflow-y: hidden;
-          padding: 0.5rem 0;
+          padding: 0.5rem 1rem;
           scroll-behavior: smooth;
           -webkit-overflow-scrolling: touch;
-          scrollbar-width: thin;
-          scrollbar-color: #FCB55B transparent;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
         }
 
         .tag-filter-scroll::-webkit-scrollbar {
-          height: 6px;
+          display: none;
         }
 
-        .tag-filter-scroll::-webkit-scrollbar-track {
-          background: transparent;
+        .tag-filter-buttons {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 1rem;
+          padding: 0.5rem 0;
         }
 
-        .tag-filter-scroll::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #FEFEB6, #FCB55B, #FC3DB1);
-          border-radius: 3px;
+        .tag-filter-arrow {
+          width: 36px;
+          height: 36px;
+          background: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 2px solid #000;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .tag-filter-arrow:hover {
+          background: #FFF4E5;
+          transform: scale(1.05);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .tag-filter-arrow:active {
+          transform: scale(0.95);
+        }
+
+        .tag-filter-arrow.hidden {
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        .tag-filter-arrow svg {
+          width: 12px;
+          height: 12px;
+          stroke: #000;
+          stroke-width: 2;
+          fill: none;
         }
 
         .tag-button {
@@ -109,17 +196,45 @@ export default function TagFilter({ tags, onTagSelect }: TagFilterProps) {
         }
       `}</style>
       <div className="tag-filter-container">
-        <div className="tag-filter-scroll">
-          {tags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => handleTagClick(tag)}
-              className={`tag-button ${selectedTag === tag ? 'active' : ''}`}
-              data-tag={tag}
+        <div className="tag-filter-wrapper">
+          <div 
+            ref={scrollRef}
+            className="tag-filter-scroll"
+            onScroll={handleScroll}
+          >
+            {tags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => handleTagClick(tag)}
+                className={`tag-button ${selectedTag === tag ? 'active' : ''}`}
+                data-tag={tag}
+              >
+                {formatTag(tag)}
+              </button>
+            ))}
+          </div>
+          <div className="tag-filter-buttons">
+            <div 
+              className={`tag-filter-arrow ${!showLeftFade ? 'hidden' : ''}`}
+              onClick={scrollLeft} 
+              role="button" 
+              aria-label="Scroll left"
             >
-              {formatTag(tag)}
-            </button>
-          ))}
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div 
+              className={`tag-filter-arrow ${!showRightFade ? 'hidden' : ''}`}
+              onClick={scrollRight} 
+              role="button" 
+              aria-label="Scroll right"
+            >
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     </>
