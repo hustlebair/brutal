@@ -112,25 +112,21 @@ const { pageTitle } = Astro.props;
     </div>
 
     <!-- Mobile menu overlay -->
-    <div class='md:hidden fixed left-0 right-0 bg-white/95 backdrop-blur-sm z-50 hidden flex-col gap-4 p-4 overflow-y-auto' id='mobileMenu' style='max-height: 70vh; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);'>
-      <div class='flex flex-col gap-2'>
-        {navigationItems.map((item) => (
-          <a class='p-2 border-2 border-black rounded-lg' href={item.url}>{item.name}</a>
-        ))}
-        <a class='p-2 border-2 border-black rounded-lg' href={tiktokUrl} target='_blank'>TikTok</a>
-      </div>
-      <div class='grid grid-cols-2 gap-2'>
-        {categories.map((cat) => (
-          <details class='border-2 border-black rounded-lg'>
-            <summary class='p-2 font-semibold'>{cat.name}</summary>
-            <ul class='p-2 pt-0'>
-              {cat.items.map((sub) => (
-                <li><a class='block px-2 py-1 text-sm rounded hover:bg-[#FFF4E5]' href={sub.url}>{sub.name}</a></li>
-              ))}
-            </ul>
-          </details>
-        ))}
-      </div>
+    <div class='md:hidden fixed left-0 right-0 backdrop-blur-sm z-50 hidden flex-col gap-3 p-4 overflow-y-auto' id='mobileMenu' style='max-height: 70vh; box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.7); background: linear-gradient(to bottom, rgba(254, 254, 182, 0.1), rgba(252, 181, 91, 0.1), rgba(252, 61, 177, 0.1)), rgba(255, 255, 255, 0.95);'>
+      {navigationItems.map((item) => (
+        <a class='p-2 border-2 border-black rounded-lg' href={item.url}>{item.name}</a>
+      ))}
+      <a class='p-2 border-2 border-black rounded-lg' href={tiktokUrl} target='_blank'>TikTok</a>
+      {categories.map((cat) => (
+        <details class='border-2 border-black rounded-lg'>
+          <summary class='p-2 font-semibold'>{cat.name}</summary>
+          <ul class='p-2 pt-0'>
+            {cat.items.map((sub) => (
+              <li><a class='block px-2 py-1 text-sm rounded hover:bg-[#FFF4E5]' href={sub.url}>{sub.name}</a></li>
+            ))}
+          </ul>
+        </details>
+      ))}
     </div>
   </div>
 </header>
