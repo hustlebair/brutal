@@ -107,6 +107,9 @@ const allTags = getAllTags(allProducts);
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: #FCB55B; /* Fallback */
+    -webkit-text-stroke: 1px #000000;
+    text-stroke: 1px #000000;
+    paint-order: stroke fill;
   }
 
   .product-card-wrapper {

@@ -15,8 +15,9 @@ export default function GradientDotsBackground({
   spacing = 10,
   duration = 30,
   colorCycleDuration = 6,
-  backgroundColor = '#ffffff',
+  backgroundColor,
 }: GradientDotsBackgroundProps) {
+  const effectiveBgColor = backgroundColor || '#ffffff';
   const containerRef = useRef<HTMLDivElement>(null);
   const hexSpacing = spacing * 1.732; // Hexagonal spacing calculation
 
@@ -62,16 +63,16 @@ export default function GradientDotsBackground({
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundColor,
+          backgroundColor: effectiveBgColor,
           backgroundImage: `
-            radial-gradient(circle at 50% 50%, transparent 1.5px, ${backgroundColor} 0 ${dotSize}px, transparent ${dotSize}px),
-            radial-gradient(circle at 50% 50%, transparent 1.5px, ${backgroundColor} 0 ${dotSize}px, transparent ${dotSize}px),
-            radial-gradient(circle at 50% 50%, rgba(254, 254, 182, 0.25), transparent 60%),
-            radial-gradient(circle at 50% 50%, rgba(252, 181, 91, 0.25), transparent 60%),
-            radial-gradient(circle at 50% 50%, rgba(252, 61, 177, 0.25), transparent 60%),
-            radial-gradient(ellipse at 50% 50%, rgba(254, 254, 182, 0.2), transparent 60%)
+            radial-gradient(circle at 50% 50%, transparent 1.5px, ${effectiveBgColor} 0 ${dotSize}px, transparent ${dotSize}px),
+            radial-gradient(circle at 50% 50%, transparent 1.5px, ${effectiveBgColor} 0 ${dotSize}px, transparent ${dotSize}px),
+            radial-gradient(circle at 50% 50%, rgba(254, 254, 182, 0.4), transparent 60%),
+            radial-gradient(circle at 50% 50%, rgba(252, 181, 91, 0.4), transparent 60%),
+            radial-gradient(circle at 50% 50%, rgba(252, 61, 177, 0.4), transparent 60%),
+            radial-gradient(ellipse at 50% 50%, rgba(254, 254, 182, 0.35), transparent 60%)
           `,
-          opacity: 0.75,
+          opacity: 0.9,
           backgroundSize: `
             ${spacing}px ${hexSpacing}px,
             ${spacing}px ${hexSpacing}px,
@@ -99,7 +100,7 @@ export default function GradientDotsBackground({
           left: 0,
           right: 0,
           height: '30px',
-          background: `linear-gradient(to bottom, ${backgroundColor}, transparent)`,
+          background: `linear-gradient(to bottom, ${effectiveBgColor}, transparent)`,
           pointerEvents: 'none',
           zIndex: 1,
         }}
