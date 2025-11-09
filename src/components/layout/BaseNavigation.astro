@@ -112,17 +112,20 @@ const { pageTitle } = Astro.props;
     </div>
 
     <!-- Mobile menu overlay -->
-    <div class='md:hidden fixed left-0 right-0 backdrop-blur-sm z-50 hidden flex-col gap-3 p-4 overflow-y-auto' id='mobileMenu' style='max-height: 70vh; box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.7); background: linear-gradient(to bottom, rgba(254, 254, 182, 0.1), rgba(252, 181, 91, 0.1), rgba(252, 61, 177, 0.1)), rgba(255, 255, 255, 0.95);'>
+    <div class='md:hidden fixed left-0 right-0 bg-white z-50 hidden flex-col p-4 overflow-y-auto' id='mobileMenu' style='max-height: 70vh; box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.7);'>
       {navigationItems.map((item) => (
-        <a class='p-2 border-2 border-black rounded-lg' href={item.url}>{item.name}</a>
+        <a class='block mb-3 px-4 py-3 bg-gray-100 rounded-lg font-semibold text-gray-900' href={item.url}>{item.name}</a>
       ))}
-      <a class='p-2 border-2 border-black rounded-lg' href={tiktokUrl} target='_blank'>TikTok</a>
+      <a class='block mb-3 px-4 py-3 bg-gray-100 rounded-lg font-semibold text-gray-900' href={tiktokUrl} target='_blank'>TikTok</a>
       {categories.map((cat) => (
-        <details class='border-2 border-black rounded-lg'>
-          <summary class='p-2 font-semibold'>{cat.name}</summary>
-          <ul class='p-2 pt-0'>
+        <details class='mb-3 bg-gray-100 rounded-lg'>
+          <summary class='block px-4 py-3 font-semibold cursor-pointer rounded-lg list-none text-gray-900 flex items-center justify-between'>
+            <span>{cat.name}</span>
+            <span class='ml-2'>▾</span>
+          </summary>
+          <ul class='px-4 pb-3 pt-0 space-y-1'>
             {cat.items.map((sub) => (
-              <li><a class='block px-2 py-1 text-sm rounded hover:bg-[#FFF4E5]' href={sub.url}>{sub.name}</a></li>
+              <li><a class='block px-2 py-2 text-sm rounded text-gray-700' href={sub.url}>{sub.name}</a></li>
             ))}
           </ul>
         </details>
