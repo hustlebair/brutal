@@ -32,7 +32,7 @@ const allTags = getAllTags(allProducts);
     <!-- Hero Section -->
     <section class="px-4 md:px-8 pt-16 pb-4 text-center">
       <h1 class="libre-baskerville-bold text-4xl md:text-6xl lg:text-7xl text-black mb-4 md:mb-6 leading-tight">
-        The Internet's <span class="text-[#FF9900]">Wishlist</span>
+        The Internet's <span class="text-gradient-logo">Wishlist</span>
       </h1>
       <p class="libre-baskerville-regular text-lg md:text-xl lg:text-2xl text-gray-700 max-w-3xl mx-auto mb-6 md:mb-8 leading-relaxed">
         The Highest-Liked gadgets, gifts, and viral products.
@@ -99,6 +99,14 @@ const allTags = getAllTags(allProducts);
   .particles-section > *:not(.particles-background) {
     position: relative;
     z-index: 1;
+  }
+
+  .text-gradient-logo {
+    background: linear-gradient(to bottom, #FEFEB6, #FCB55B, #FC3DB1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #FCB55B; /* Fallback */
   }
 
   .product-card-wrapper {

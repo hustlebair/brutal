@@ -66,10 +66,10 @@ export default function GradientDotsBackground({
           backgroundImage: `
             radial-gradient(circle at 50% 50%, transparent 1.5px, ${backgroundColor} 0 ${dotSize}px, transparent ${dotSize}px),
             radial-gradient(circle at 50% 50%, transparent 1.5px, ${backgroundColor} 0 ${dotSize}px, transparent ${dotSize}px),
-            radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.25), transparent 60%),
-            radial-gradient(circle at 50% 50%, rgba(255, 255, 0, 0.25), transparent 60%),
-            radial-gradient(circle at 50% 50%, rgba(0, 255, 0, 0.25), transparent 60%),
-            radial-gradient(ellipse at 50% 50%, rgba(0, 0, 255, 0.25), transparent 60%)
+            radial-gradient(circle at 50% 50%, rgba(254, 254, 182, 0.25), transparent 60%),
+            radial-gradient(circle at 50% 50%, rgba(252, 181, 91, 0.25), transparent 60%),
+            radial-gradient(circle at 50% 50%, rgba(252, 61, 177, 0.25), transparent 60%),
+            radial-gradient(ellipse at 50% 50%, rgba(254, 254, 182, 0.2), transparent 60%)
           `,
           opacity: 0.75,
           backgroundSize: `

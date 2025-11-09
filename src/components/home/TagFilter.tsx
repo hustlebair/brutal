@@ -47,7 +47,7 @@ export default function TagFilter({ tags, onTagSelect }: TagFilterProps) {
           scroll-behavior: smooth;
           -webkit-overflow-scrolling: touch;
           scrollbar-width: thin;
-          scrollbar-color: #FF9900 transparent;
+          scrollbar-color: #FCB55B transparent;
         }
 
         .tag-filter-scroll::-webkit-scrollbar {
@@ -59,7 +59,7 @@ export default function TagFilter({ tags, onTagSelect }: TagFilterProps) {
         }
 
         .tag-filter-scroll::-webkit-scrollbar-thumb {
-          background-color: #FF9900;
+          background: linear-gradient(to bottom, #FEFEB6, #FCB55B, #FC3DB1);
           border-radius: 3px;
         }
 
@@ -86,14 +86,14 @@ export default function TagFilter({ tags, onTagSelect }: TagFilterProps) {
         }
 
         .tag-button.active {
-          background: #FF9900;
+          background: linear-gradient(to bottom, #FEFEB6, #FCB55B, #FC3DB1);
           color: #000;
-          border-color: #FF9900;
-          box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+          border-color: #FCB55B;
+          box-shadow: 0 4px 12px rgba(252, 181, 91, 0.3);
         }
 
         .tag-button.active:hover {
-          background: #ff8800;
+          opacity: 0.9;
           transform: translateY(-2px);
         }
 

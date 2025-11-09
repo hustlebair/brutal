@@ -67,7 +67,7 @@ const { pageTitle } = Astro.props;
       <div class='hidden md:flex flex-1 justify-center items-center gap-6 px-4'>
         {categories.map((cat) => (
           <div class='relative group'>
-            <button class='poppins text-base font-semibold hover:text-[#FF9900] transition-colors'>
+            <button class='poppins text-base font-semibold hover:text-[#FCB55B] transition-colors'>
               {cat.name}
               <span class='ml-1'>▾</span>
             </button>
@@ -90,7 +90,7 @@ const { pageTitle } = Astro.props;
       <div class='hidden md:flex items-center gap-6 shrink-0'>
         {navigationItems.map((item) => (
           <a
-            class='poppins text-base font-semibold hover:text-[#FF9900] transition-colors'
+            class='poppins text-base font-semibold hover:text-[#FCB55B] transition-colors'
             href={item.url}
             title={`Go to ${item.name}`}
           >
@@ -134,12 +134,12 @@ const { pageTitle } = Astro.props;
 <style>
   .logo-image {
     display: block;
-    height: 3rem; /* h-12 */
+    height: 2.25rem; /* 36px */
   }
 
   @media (min-width: 768px) {
     .logo-image {
-      height: 4.5rem; /* h-18 */
+      height: 2.75rem; /* 44px */
     }
   }
 
