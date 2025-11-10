@@ -112,6 +112,15 @@ const staticProducts: Product[] = [
     primaryCategory: "🏠 Home & Office",
     tags: ["gifts-for-him", "under-50", "electronics"],
   },
+  {
+    name: "Remote Control Dinosaur Toys for Kids",
+    description: "Unleash the Jurassic World with Moskiddo RC Dinosaur! The T-Rex brings prehistoric playtime to life, featuring realistic walking, ferocious roars, mist spraying, and a LED light.",
+    image: "https://www.highestliked.com/dino.jpg",
+    url: "https://amzn.to/3WJRMz1",
+    categories: ["🔥 Trending"],
+    primaryCategory: "🔥 Trending",
+    tags: ["gifts-for-kids", "under-50", "birthday"],
+  },
 ];
 
 // Helper function to normalize image URLs
