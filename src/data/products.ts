@@ -130,6 +130,24 @@ const staticProducts: Product[] = [
     primaryCategory: "🏠 Home & Office",
     tags: ["gifts-for-him", "gifts-for-her", "under-100", "home-decor"],
   },
+  {
+    name: "Mini Archery Compound Bow",
+    description: "Not for children! This is a high powered mini compound bow that comes with 10 steel tipped arrows that can pierce through a cardboard box. A great gift for anyone who likes to shoot things.",
+    image: "https://www.highestliked.com/compoundbow.jpg",
+    url: "https://amzn.to/49bfdZj",
+    categories: ["🔥 Trending", "🚀 TikTok Finds"],
+    primaryCategory: "🚀 TikTok Finds",
+    tags: ["gifts-for-him", "under-20", "tiktok-finds"],
+  },
+  {
+    name: "1000X Handheld Microscope for Kids",
+    description: "The Portable Microscope gives kids a wild 200x–1000x zoom range, meaning they can examine insects, plants, fabrics, coins, or anything they find in the backyard with real lab-style clarity. The microscope includes lab-grade prepared slides, upgraded viewing slots for smoother focusing, and a protective EVA hard case for travel and storage.",
+    image: "https://www.highestliked.com/magnifier.jpg",
+    url: "https://amzn.to/49HNnUG",
+    categories: ["🚀 TikTok Finds"],
+    primaryCategory: "🚀 TikTok Finds",
+    tags: ["gifts-for-kids", "under-50", "tiktok-finds"],
+  },
 ];
 
 // Helper function to normalize image URLs
