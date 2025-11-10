@@ -141,12 +141,21 @@ const staticProducts: Product[] = [
   },
   {
     name: "1000X Handheld Microscope for Kids",
-    description: "The Portable Microscope gives kids a wild 200x–1000x zoom range, meaning they can examine insects, plants, fabrics, coins, or anything they find in the backyard with real lab-style clarity. The microscope includes lab-grade prepared slides, upgraded viewing slots for smoother focusing, and a protective EVA hard case for travel and storage.",
+    description: "The Portable Microscope gives kids a wild 200x–1000x zoom range, meaning they can examine insects, plants, fabrics, coins, or anything they find in the backyard with real lab-style clarity.",
     image: "https://www.highestliked.com/magnifier.jpg",
     url: "https://amzn.to/49HNnUG",
     categories: ["🚀 TikTok Finds"],
     primaryCategory: "🚀 TikTok Finds",
     tags: ["gifts-for-kids", "under-50", "tiktok-finds"],
+  },
+  {
+    name: "Original Aztec Death Whistle",
+    description: "This Aztec Death Whistle produces human-like screams so realistic it's legitimately unsettling, engineered from years of studying real Aztec whistles, human vocal tones, and premium materials. Lab-tested at over 125+ decibels, it's one of the loudest on the market, perfect for pranks, Halloween, Day of the Dead, or scaring friends from far away on hikes",
+    image: "https://www.highestliked.com/aztec.jpg",
+    url: "https://amzn.to/4qWkRFk",
+    categories: ["🔥 Trending", "🎁 Funny Gifts"],
+    primaryCategory: "🎁 Funny Gifts",
+    tags: ["gifts-for-him", "under-50", "birthday"],
   },
 ];
 
