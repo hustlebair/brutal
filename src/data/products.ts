@@ -121,6 +121,15 @@ const staticProducts: Product[] = [
     primaryCategory: "🔥 Trending",
     tags: ["gifts-for-kids", "under-50", "birthday"],
   },
+  {
+    name: "Govee Smart Table Lamp",
+    description: "The Govee Smart Table Lamp packs serious lighting power into a compact, modern design. Whether you're setting the vibe for late-night relaxation, gaming, or productivity, this lamp looks premium, performs flawlessly, and feels way more advanced than its size suggests. Highly recommended if you want a stylish smart lamp with rich lighting effects that just works.",
+    image: "https://www.highestliked.com/smartlampgovee.jpg",
+    url: "https://amzn.to/4p1nUKq",
+    categories: ["🏠 Home & Office", "🔥 Trending"],
+    primaryCategory: "🏠 Home & Office",
+    tags: ["gifts-for-him", "gifts-for-her", "under-100", "home-decor"],
+  },
 ];
 
 // Helper function to normalize image URLs
