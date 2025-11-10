@@ -32,6 +32,16 @@ const twitterImageURL = new URL('/highestliked-twitter.png', Astro.site || 'http
   <meta name='viewport' content='width=device-width, initial-scale=1' />
   <meta name='generator' content={Astro.generator} />
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3SWZH838RQ"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-3SWZH838RQ');
+  </script>
+
   <link
     rel='alternate'
     href='https://brutal.elian.codes/blog.xml'
