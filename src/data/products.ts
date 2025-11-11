@@ -175,6 +175,24 @@ const staticProducts: Product[] = [
     primaryCategory: "🔥 Trending",
     tags: ["gifts-for-kids", "under-20"],
   },
+  {
+    name: "7ft Wacky Wailing Inflatable Tube Man",
+    description: "Hi, I'm Al Harrington, President and CEO of Al Harrington's Wacky Waving Inflatable Arm Flailing Tube Man Emporium and Warehouse! Thanks to a shipping error I am now currently overstocked on wacky waving inflatable arm flailing tube men, and I am passing the savings on to you!",
+    image: "https://www.highestliked.com/tubeman.jpg",
+    url: "https://amzn.to/4qYdu04",
+    categories: ["🎁 Funny Gifts"],
+    primaryCategory: "🎁 Funny Gifts",
+    tags: ["gifts-for-him", "office-supplies", "birthday"],
+  },
+  {
+    name: "Nex Playground - The Ultimate Family Time",
+    description: "The Nex Playground is an interactive family gaming device that turns your living room into a motion-controlled adventure zone — no controllers needed. Using AI body tracking, it lets everyone jump, dance, and compete together through fun, high-energy games. It's built for all ages, combining fitness, laughter, and connection in one sleek setup. Perfect for family nights, parties, or just getting the kids moving again.",
+    image: "https://www.highestliked.com/nexplayground.jpg",
+    url: "https://amzn.to/3JNDrhS",
+    categories: ["🔥 Trending", "🧠 Smart Finds"],
+    primaryCategory: "🧠 Smart Finds",
+    tags: ["birthday", "electronics", "viral", "gifts-for-kids"],
+  },
 ];
 
 // Helper function to normalize image URLs
