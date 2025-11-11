@@ -83,7 +83,7 @@ const staticProducts: Product[] = [
     url: "https://amzn.to/4hVrxiS",
     categories: ["🏠 Home & Office", "🔥 Trending"],
     primaryCategory: "🏠 Home & Office",
-    tags: ["gifts-for-her", "gifts-for-him", "home-decor", "viral"],
+    tags: ["gifts-for-her", "gifts-for-him", "home-decor","under-50", "viral"],
   },
   {
     name: "The Gecko RC Wall Crawler",
@@ -265,7 +265,10 @@ export async function getProducts(baseUrl?: string): Promise<Product[]> {
     ...product,
     image: normalizeImageUrl(product.image, baseUrl),
   }));
-  return [...normalizedStaticProducts, ...fileProducts];
+  // Migrate categories/tags to canonical sets at runtime
+  const { migrateProducts } = await import('@utils/migrateProducts');
+  const merged = [...normalizedStaticProducts, ...fileProducts];
+  return migrateProducts(merged as any);
 }
 
 // For backward compatibility, export static products
