@@ -53,6 +53,13 @@ const CATEGORY_MAP: Record<string, string> = {
   Outdoor: 'Adventure',
   Outdoors: 'Adventure',
   Seasonal: 'Seasonal',
+  // Also map IDs to labels
+  'cat-cool-tech': 'Cool Tech',
+  'cat-home-stuff': 'Home Stuff',
+  'cat-self-care': 'Self Care',
+  'cat-lol-gifts': 'LOL Gifts',
+  'cat-adventure': 'Adventure',
+  'cat-seasonal': 'Seasonal',
 };
 
 export function normalizeCategories(cats: string[]): string[] {

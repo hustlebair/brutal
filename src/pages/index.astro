@@ -40,6 +40,7 @@ const allProducts = await getProducts(baseUrl);
             <div
               class="product-card-wrapper"
               data-tags={product.tags?.map(t => t.toLowerCase()).join(',') || ''}
+              data-categories={[...(product.categories || []), product.primaryCategory].filter(Boolean).map(c => c.toLowerCase()).join(',')}
             >
               <ProductCard
                 name={product.name}
@@ -113,38 +114,60 @@ const allProducts = await getProducts(baseUrl);
 <script>
   // Handle filter chip filtering (supports multi-select AND logic)
   document.addEventListener('astro:page-load', () => {
-    const applyFilters = (selectedFilters) => {
+    // Get category from URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryFilter = urlParams.get('category')?.toLowerCase();
+
+    const applyFilters = (selectedFilters, category?: string) => {
       const productWrappers = document.querySelectorAll('.product-card-wrapper');
       const active = Array.isArray(selectedFilters) ? selectedFilters.map(s => String(s).toLowerCase()) : [];
 
       productWrappers.forEach((wrapper) => {
-        const tags = (wrapper.getAttribute('data-tags') || '').split(',');
-        // If none selected -> show all
-        if (!active.length) {
+        const tags = (wrapper.getAttribute('data-tags') || '').split(',').map(t => t.trim()).filter(Boolean);
+        const categories = (wrapper.getAttribute('data-categories') || '').split(',').map(c => c.trim()).filter(Boolean);
+
+        // Category filter (from URL)
+        let categoryMatch = true;
+        if (category) {
+          const normalizedCategory = category.trim().toLowerCase();
+          categoryMatch = categories.some(c => c.toLowerCase() === normalizedCategory);
+        }
+
+        // Tag filter
+        let tagMatch = true;
+        if (active.length > 0) {
+          // OR match: at least one of the selected tags must be present on the product
+          tagMatch = active.some(t => tags.includes(t));
+        }
+
+        // Show if both category and tag filters match (or no filters applied)
+        if (categoryMatch && tagMatch) {
           wrapper.classList.remove('hidden');
         } else {
-          // OR match: at least one of the selected tags must be present on the product
-          const matchesAny = active.some(t => tags.includes(t));
-          if (matchesAny) wrapper.classList.remove('hidden');
-          else wrapper.classList.add('hidden');
+          wrapper.classList.add('hidden');
         }
       });
     };
+
+    // Apply category filter on page load
+    if (categoryFilter) {
+      applyFilters([], categoryFilter);
+    }
 
     // Backward compatibility: single-select event
     window.addEventListener('filterSelected', ((e: CustomEvent) => {
       const selectedFilter = e.detail.filter;
       if (selectedFilter === null) {
-        applyFilters([]);
+        applyFilters([], categoryFilter || undefined);
       } else {
-        applyFilters([selectedFilter]);
+        applyFilters([selectedFilter], categoryFilter || undefined);
       }
     }) as EventListener);
 
     // New multi-select event
     window.addEventListener('filtersSelected', ((e: CustomEvent) => {
       const arr = Array.isArray(e.detail.filters) ? e.detail.filters : [];
-      applyFilters(arr);
+      applyFilters(arr, categoryFilter || undefined);
     }) as EventListener);
   });
 </script>
