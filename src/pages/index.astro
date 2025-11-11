@@ -2,24 +2,13 @@
 import Layout from '@layouts/Default.astro';
 import ProductCard from '@components/home/ProductCard.astro';
 import GradientDotsBackground from '@components/home/GradientDotsBackground';
-import TagFilter from '@components/home/TagFilter';
+import FilterChips from '@components/home/FilterChips';
 import { getProducts, type Product } from '@data/products';
 
 // Get base URL for image normalization (works in both dev and production)
 // Use site URL in production, or current origin in dev
 const baseUrl = Astro.site?.toString() || new URL(Astro.url.origin).toString();
 const allProducts = await getProducts(baseUrl);
-
-// Get all unique tags from products
-function getAllTags(products: Product[]): string[] {
-  const tags = new Set<string>();
-  products.forEach((product) => {
-    product.tags?.forEach((tag) => tags.add(tag));
-  });
-  return Array.from(tags).sort();
-}
-
-const allTags = getAllTags(allProducts);
 ---
 
 <Layout
@@ -34,13 +23,13 @@ const allTags = getAllTags(allProducts);
       <h1 class="libre-baskerville-bold text-4xl md:text-6xl lg:text-7xl text-black mb-4 md:mb-6 leading-tight">
         The Internet's <span class="text-gradient-logo">Wishlist</span>
       </h1>
-      <p class="libre-baskerville-regular text-lg md:text-xl lg:text-2xl text-gray-700 max-w-3xl mx-auto mb-6 md:mb-8 leading-relaxed">
+      <p class="libre-baskerville-regular text-lg md:text-xl lg:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
         The Highest-Liked gadgets, gifts, and viral products.
       </p>
-      <div class="max-w-7xl mx-auto mb-8 md:mb-12">
-        <TagFilter client:load tags={allTags} onTagSelect={() => {}} />
-      </div>
     </section>
+
+    <!-- Filter Chips Section -->
+    <FilterChips client:load onFilterSelect={() => {}} />
 
     <!-- Product Grid Section -->
     <section id="products" class="px-4 md:px-8 py-8 particles-section">
@@ -122,16 +111,16 @@ const allTags = getAllTags(allProducts);
 </style>
 
 <script>
-  // Handle tag filtering
+  // Handle filter chip filtering
   document.addEventListener('astro:page-load', () => {
-    // Listen for tag selection events
-    window.addEventListener('tagSelected', ((e: CustomEvent) => {
-      const selectedTag = e.detail.tag;
+    // Listen for filter selection events
+    window.addEventListener('filterSelected', ((e: CustomEvent) => {
+      const selectedFilter = e.detail.filter;
       const productWrappers = document.querySelectorAll('.product-card-wrapper');
       
       productWrappers.forEach((wrapper) => {
         const tags = (wrapper.getAttribute('data-tags') || '').split(',');
-        if (selectedTag === null || tags.includes(selectedTag.toLowerCase())) {
+        if (selectedFilter === null || tags.includes(selectedFilter.toLowerCase())) {
           wrapper.classList.remove('hidden');
         } else {
           wrapper.classList.add('hidden');

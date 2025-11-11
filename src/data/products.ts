@@ -157,6 +157,15 @@ const staticProducts: Product[] = [
     primaryCategory: "🎁 Funny Gifts",
     tags: ["gifts-for-him", "under-50", "birthday"],
   },
+  {
+    name: "Smart LED Light Bars",
+    description: "Increase the vibes with 2 smart LED bars with up to 16 million colors to choose from. Works with Alex and Google assistant and also sync with your music. Lay it flat, vertical or mount behind your monitor or TV. Group with other Govee Lights with the app.",
+    image: "https://www.highestliked.com/lightbar.jpg",
+    url: "https://amzn.to/4nMpH4Q",
+    categories: ["🔥 Trending", "🏠 Home & Office"],
+    primaryCategory: "🏠 Home & Office",
+    tags: ["gifts-for-him", "under-50", "home-decor"],
+  },
 ];
 
 // Helper function to normalize image URLs
