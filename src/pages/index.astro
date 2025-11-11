@@ -2,7 +2,7 @@
 import Layout from '@layouts/Default.astro';
 import ProductCard from '@components/home/ProductCard.astro';
 import GradientDotsBackground from '@components/home/GradientDotsBackground';
-import FilterChips from '@components/home/FilterChips';
+import TagGroupSelection from '@components/home/TagGroupSelection';
 import { getProducts, type Product } from '@data/products';
 
 // Get base URL for image normalization (works in both dev and production)
@@ -28,8 +28,8 @@ const allProducts = await getProducts(baseUrl);
       </p>
     </section>
 
-    <!-- Filter Chips Section -->
-    <FilterChips client:load onFilterSelect={() => {}} />
+    <!-- Tag Group Selection Section -->
+    <TagGroupSelection client:load onFilterSelect={() => {}} />
 
     <!-- Product Grid Section -->
     <section id="products" class="px-4 md:px-8 py-8 particles-section">
@@ -111,21 +111,43 @@ const allProducts = await getProducts(baseUrl);
 </style>
 
 <script>
-  // Handle filter chip filtering
+  // Handle filter chip filtering (supports multi-select AND logic)
   document.addEventListener('astro:page-load', () => {
-    // Listen for filter selection events
-    window.addEventListener('filterSelected', ((e: CustomEvent) => {
-      const selectedFilter = e.detail.filter;
+    const applyFilters = (selectedFilters) => {
       const productWrappers = document.querySelectorAll('.product-card-wrapper');
-      
+      const active = Array.isArray(selectedFilters) ? selectedFilters.map(s => String(s).toLowerCase()) : [];
+
       productWrappers.forEach((wrapper) => {
         const tags = (wrapper.getAttribute('data-tags') || '').split(',');
-        if (selectedFilter === null || tags.includes(selectedFilter.toLowerCase())) {
+        // If none selected -> show all
+        if (!active.length) {
           wrapper.classList.remove('hidden');
         } else {
-          wrapper.classList.add('hidden');
+          // AND match: every selected tag must be present on the product
+          const matchesAll = active.every(t => tags.includes(t));
+          if (matchesAll) {
+            wrapper.classList.remove('hidden');
+          } else {
+            wrapper.classList.add('hidden');
+          }
         }
       });
+    };
+
+    // Backward compatibility: single-select event
+    window.addEventListener('filterSelected', ((e: CustomEvent) => {
+      const selectedFilter = e.detail.filter;
+      if (selectedFilter === null) {
+        applyFilters([]);
+      } else {
+        applyFilters([selectedFilter]);
+      }
+    }) as EventListener);
+
+    // New multi-select event
+    window.addEventListener('filtersSelected', ((e: CustomEvent) => {
+      const arr = Array.isArray(e.detail.filters) ? e.detail.filters : [];
+      applyFilters(arr);
     }) as EventListener);
   });
 </script>
