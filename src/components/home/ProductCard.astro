@@ -40,7 +40,7 @@ const displayCategory = primaryCategory || category;
         href={url}
         target="_blank"
         rel="noopener noreferrer sponsored"
-        class="dm-sans ml-auto bg-gradient-to-b from-[#FEFEB6] via-[#FCB55B] to-[#FC3DB1] text-black px-4 py-2 rounded-lg font-bold text-sm md:text-base hover:opacity-90 hover:shadow-lg transition-all duration-300 hover:scale-105 inline-flex items-center gap-2"
+        class="cartoon-button dm-sans ml-auto inline-flex items-center gap-2"
       >
         CHECK IT OUT
         <span>→</span>
@@ -56,6 +56,42 @@ const displayCategory = primaryCategory || category;
 
   .dm-sans {
     font-family: "DM Sans", sans-serif;
+  }
+
+  .cartoon-button {
+    background: #FFD700;
+    color: #000;
+    font-weight: 900;
+    font-size: 0.7rem;
+    padding: 0.45rem 0.9rem;
+    border: 3px solid #000;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 0 #000, 0 6px 0 rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.1s ease;
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .cartoon-button:hover {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #000, 0 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .cartoon-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #000, 0 2px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  @media (min-width: 768px) {
+    .cartoon-button {
+      font-size: 0.8rem;
+      padding: 0.55rem 1.1rem;
+    }
   }
 
   @keyframes fadeIn {
