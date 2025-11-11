@@ -508,18 +508,21 @@ const { pageTitle } = Astro.props;
 
     // Scroll detection for compact nav
     const header = document.getElementById('mainNav');
-    let lastScrollY = window.scrollY;
+    let isScrolled = false;
+    const SCROLL_THRESHOLD_DOWN = 60; // When scrolling down, activate at 60px
+    const SCROLL_THRESHOLD_UP = 40; // When scrolling up, deactivate at 40px (hysteresis)
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      if (currentScrollY > 50) {
+      // Use different thresholds for scrolling up vs down to prevent flickering
+      if (!isScrolled && currentScrollY > SCROLL_THRESHOLD_DOWN) {
+        isScrolled = true;
         header?.classList.add('scrolled');
-      } else {
+      } else if (isScrolled && currentScrollY < SCROLL_THRESHOLD_UP) {
+        isScrolled = false;
         header?.classList.remove('scrolled');
       }
-      
-      lastScrollY = currentScrollY;
     };
 
     // Initial check
@@ -535,6 +538,6 @@ const { pageTitle } = Astro.props;
         });
         ticking = true;
       }
-    });
+    }, { passive: true });
   });
 </script>
