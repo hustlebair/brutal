@@ -193,6 +193,15 @@ const staticProducts: Product[] = [
     primaryCategory: "🧠 Smart Finds",
     tags: ["birthday", "electronics", "viral", "gifts-for-kids"],
   },
+  {
+    name: "Overnighter SUV Window Tent",
+    description: "Solves 3 problems in one. Keep the bugs out, keep the rain out, and allow airflow. Installs easily by stretching around the perimeter of the door using the built-in elastic band (Fits both sides). No tools required. And you can still operate the side power windows.",
+    image: "https://www.highestliked.com/roadie.jpg",
+    url: "https://amzn.to/4qRBZvN",
+    categories: ["Outdoor"],
+    primaryCategory: "Outdoor",
+    tags: ["under-50"],
+  },
 ];
 
 // Helper function to normalize image URLs
