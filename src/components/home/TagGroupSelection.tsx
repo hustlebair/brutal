@@ -10,6 +10,7 @@ interface ChipFilter {
   filterTag?: string; // Maps to product tags
 }
 
+// Public homepage filters (single grouped row, multi-select)
 const filters: ChipFilter[] = [
   { id: 'all', label: 'All' },
   { id: 'for-him', label: 'For Him', filterTag: 'gifts-for-him' },
@@ -27,21 +28,17 @@ export default function TagGroupSelection({ onFilterSelect }: TagGroupSelectionP
 
   const handleSelect = (f: ChipFilter) => {
     if (f.id === 'all') {
-      // Clear selection
-      const next = new Set<string>();
-      setSelectedIds(next);
+      const cleared = new Set<string>();
+      setSelectedIds(cleared);
       onFilterSelect?.(null);
       window.dispatchEvent(new CustomEvent('filtersSelected', { detail: { filters: [] } }));
       return;
     }
     const next = new Set(selectedIds);
-    if (next.has(f.id)) {
-      next.delete(f.id);
-    } else {
-      next.add(f.id);
-    }
+    if (next.has(f.id)) next.delete(f.id);
+    else next.add(f.id);
     setSelectedIds(next);
-    // Emit the mapped tags (AND filter on the page)
+
     const selectedTags = Array.from(next)
       .map(id => filters.find(ff => ff.id === id)?.filterTag || id)
       .filter(Boolean)
@@ -54,7 +51,8 @@ export default function TagGroupSelection({ onFilterSelect }: TagGroupSelectionP
     <>
       <style>{`
         .tg-container { width: 100%; display: flex; justify-content: center; padding: 1.5rem 0 1.75rem; overflow: visible; }
-        .tg-scroll { display: flex; gap: 0.5rem; overflow-x: auto; overflow-y: visible; padding: 0.5rem 1rem; scrollbar-width: none; -ms-overflow-style: none; }
+        /* Mobile: allow wrapping to next line */
+        .tg-scroll { display: flex; flex-wrap: wrap; gap: 0.5rem; overflow: visible; padding: 0.5rem 1rem; scrollbar-width: none; -ms-overflow-style: none; }
         .tg-scroll::-webkit-scrollbar { display: none; }
 
         .tg-chip { position: relative; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 12px; border-radius: 9999px; font-family: "DM Sans", sans-serif; font-weight: 600; font-size: 0.75rem; color: #111827; background: #fff; border: 1px solid #E5E7EB; transition: all .15s ease; cursor: pointer; }
@@ -66,7 +64,8 @@ export default function TagGroupSelection({ onFilterSelect }: TagGroupSelectionP
         .tg-chip.active::after { content: ""; position: absolute; inset: 1px; border-radius: 9999px; background: rgba(250,34,132,0.06); }
 
         @media (min-width: 768px) {
-          .tg-scroll { gap: 0.625rem; padding: 0.75rem 1.5rem; }
+          /* Desktop: single row with horizontal scroll */
+          .tg-scroll { flex-wrap: wrap; gap: 0.625rem; padding: 0.75rem 1.5rem; overflow: visible; }
           .tg-chip { height: 34px; padding: 0 14px; font-size: 0.8rem; }
         }
       `}</style>

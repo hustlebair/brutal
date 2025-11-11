@@ -3,30 +3,29 @@ import type { Product } from '@data/products';
 import { makeProductMarkdown, generateFilename } from '@utils/makeProductMarkdown';
 
 const DEFAULT_CATEGORIES = [
-  '🔥 Trending',
-  '🧠 Smart Finds',
-  '🏠 Home & Office',
-  '🎁 Funny Gifts',
-  '🚀 TikTok Finds',
+  'Cool Tech',
+  'Home Stuff',
+  'Self Care',
+  'LOL Gifts',
+  'Adventure',
+  'Seasonal',
 ];
 
-const SUGGESTED_TAGS = [
-  'gifts-for-him',
-  'gifts-for-her',
-  'gifts-for-kids',
-  'anniversary',
-  'birthday',
-  'valentines',
-  'christmas',
-  'under-20',
-  'under-50',
-  'under-100',
-  'electronics',
-  'home-decor',
-  'office-supplies',
+// Grouped suggested tags
+const TAGS_PRICE = ['under-20', '20-50', '50-100', 'over-100'];
+const TAGS_RECIPIENT = ['for-him', 'for-her', 'for-kids', 'for-everyone'];
+const TAGS_CONTEXT = [
   'viral',
-  'tiktok-finds',
-  'trending-now',
+  'funny',
+  'aesthetic',
+  'useful',
+  'birthday',
+  'christmas',
+  'valentines',
+  'anniversary',
+  'mothers-day',
+  'fathers-day',
+  'white-elephant',
 ];
 
 export default function AdminQuickAdd() {
@@ -438,20 +437,56 @@ export default function AdminQuickAdd() {
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={handleTagInputKeyDown}
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#FF9900] focus:outline-none mb-2"
+                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#FF9900] focus:outline-none mb-3"
                 placeholder="Type tags separated by commas, press Enter"
               />
-              <div className="flex flex-wrap gap-2 mb-2">
-                {SUGGESTED_TAGS.map(tag => (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => addTag(tag)}
-                    className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200"
-                  >
-                    + {tag}
-                  </button>
-                ))}
+              {/* Suggested Tag Groups */}
+              <div className="space-y-3 mb-3">
+                <div>
+                  <div className="text-xs font-bold tracking-wide text-gray-600 mb-1">PRICE</div>
+                  <div className="flex flex-wrap gap-2">
+                    {TAGS_PRICE.map(tag => (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => addTag(tag)}
+                        className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200"
+                      >
+                        + {tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs font-bold tracking-wide text-gray-600 mb-1">RECIPIENT</div>
+                  <div className="flex flex-wrap gap-2">
+                    {TAGS_RECIPIENT.map(tag => (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => addTag(tag)}
+                        className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200"
+                      >
+                        + {tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs font-bold tracking-wide text-gray-600 mb-1">CONTEXT</div>
+                  <div className="flex flex-wrap gap-2">
+                    {TAGS_CONTEXT.map(tag => (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => addTag(tag)}
+                        className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200"
+                      >
+                        + {tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
               <div className="flex flex-wrap gap-2">
                 {draft.tags?.map(tag => (
