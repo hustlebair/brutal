@@ -21,36 +21,100 @@ const tiktokUrl = 'https://www.tiktok.com/@highestliked';
 const { pageTitle } = Astro.props;
 ---
 
-<header class='site-nav sticky top-0 z-50 bg-white border-b-4 border-black'>
+<header class='site-nav sticky top-0 z-50 bg-white border-b-4 border-black' id='mainNav'>
   {pageTitle && <h1 class='hidden'>{pageTitle}</h1>}
   <div class='container mx-auto px-4'>
-    <div class='nav-bar flex items-center justify-between py-2'>
-      <!-- Left: Logo -->
-      <div class='shrink-0'>
-        <a href='/' title='Back to Home' class='block'>
-          <img 
-            src='/highestlikedlogo.png' 
-            alt='Highest Liked' 
-            class='logo-image w-auto object-contain'
-            loading='eager'
-          />
-        </a>
+    <div class='nav-bar py-3'>
+      <!-- Top Row: Search, Logo, Links -->
+      <div class='relative flex items-center justify-between mb-3 top-row'>
+        <!-- Desktop: Left Search Bar -->
+        <div class='hidden md:block search-wrapper'>
+          <div class='search-container relative'>
+            <input
+              type='text'
+              id='productSearch'
+              placeholder='Search products...'
+              class='search-input px-3 py-1.5 pr-8 border-2 border-gray-300 rounded-lg focus:border-[#FCB55B] focus:outline-none text-sm'
+            />
+            <svg class='search-icon absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Mobile: Left Search Icon Button -->
+        <button class='md:hidden search-icon-button p-2' id='mobileSearchToggle' aria-label='Toggle search' aria-expanded='false'>
+          <svg class='w-6 h-6 text-gray-700' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
+          </svg>
+        </button>
+
+        <!-- Center: Logo (absolutely centered) -->
+        <div class='absolute left-1/2 -translate-x-1/2 logo-wrapper'>
+          <a href='/' title='Back to Home' class='block'>
+            <img 
+              src='/highestlikedlogo.png' 
+              alt='Highest Liked' 
+              class='logo-image w-auto object-contain'
+              loading='eager'
+            />
+          </a>
+        </div>
+
+        <!-- Desktop: Right Links -->
+        <div class='hidden md:flex items-center gap-6 links-wrapper'>
+          {navigationItems.map((item) => (
+            <a
+              class='poppins text-base font-semibold hover:text-[#FCB55B] transition-colors'
+              href={item.url}
+              title={`Go to ${item.name}`}
+            >
+              {item.name}
+            </a>
+          ))}
+          <a href={tiktokUrl} target='_blank' title='TikTok' aria-label='TikTok'
+            class='inline-flex items-center justify-center'>
+            <img src='/icon/tiktokicon.png' alt='TikTok' class='h-6 w-6 object-contain align-middle' loading='eager' />
+          </a>
+        </div>
+
+        <!-- Mobile: Right Menu Button -->
+        <button class='md:hidden border-2 border-black px-3 py-2 rounded-lg flex flex-col gap-1.5' id='navToggle' aria-label='Toggle menu' aria-expanded='false'>
+          <span class='hamburger-line'></span>
+          <span class='hamburger-line'></span>
+          <span class='hamburger-line'></span>
+        </button>
       </div>
 
-      <!-- Center: Categories (desktop) -->
-      <div class='hidden md:flex flex-1 justify-center items-center gap-6 px-4'>
+      <!-- Mobile: Popup Search Form -->
+      <div class='md:hidden mobile-search-popup hidden' id='mobileSearchPopup'>
+        <div class='search-popup-container relative mt-2'>
+          <input
+            type='text'
+            id='productSearchMobilePopup'
+            placeholder='Search products...'
+            class='search-input w-full px-4 py-2 pr-10 border-2 border-gray-300 rounded-lg focus:border-[#FCB55B] focus:outline-none'
+          />
+          <svg class='search-icon absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Categories Row: Evenly Spaced -->
+      <div class='hidden md:flex items-center justify-between w-full categories-row'>
         {categories.map((cat) => {
           const hasChildren = Array.isArray(cat.items) && cat.items.length > 0;
           const categoryUrl = `/?category=${encodeURIComponent(cat.name)}`;
           return (
-            <div class='relative group'>
+            <div class='category-container relative group flex-1 text-center'>
               {hasChildren ? (
                 <>
-                  <button class='poppins text-base font-semibold hover:text-[#FCB55B] transition-colors'>
+                  <button class='category-link poppins text-sm font-semibold hover:text-[#FCB55B] transition-colors'>
                     {cat.name}
                     <span class='ml-1'>▾</span>
                   </button>
-                  <div class='absolute left-1/2 -translate-x-1/2 mt-2 hidden group-hover:block bg-white border-2 border-black rounded-xl shadow-lg min-w-[220px] z-50'>
+                  <div class='category-dropdown absolute left-1/2 -translate-x-1/2 mt-2 hidden group-hover:block bg-white border-2 border-black rounded-xl shadow-lg min-w-[220px] z-50'>
                     <ul class='p-2'>
                       <li>
                         <a href={categoryUrl} class='block px-4 py-2 text-sm hover:bg-[#FFF4E5] rounded-lg font-semibold'>
@@ -68,7 +132,7 @@ const { pageTitle } = Astro.props;
                   </div>
                 </>
               ) : (
-                <a href={categoryUrl} class='poppins text-base font-semibold hover:text-[#FCB55B] transition-colors'>
+                <a href={categoryUrl} class='category-link poppins text-sm font-semibold hover:text-[#FCB55B] transition-colors'>
                   {cat.name}
                 </a>
               )}
@@ -76,30 +140,6 @@ const { pageTitle } = Astro.props;
           );
         })}
       </div>
-
-      <!-- Right: Links -->
-      <div class='hidden md:flex items-center gap-6 shrink-0'>
-        {navigationItems.map((item) => (
-          <a
-            class='poppins text-base font-semibold hover:text-[#FCB55B] transition-colors'
-            href={item.url}
-            title={`Go to ${item.name}`}
-          >
-            {item.name}
-          </a>
-        ))}
-        <a href={tiktokUrl} target='_blank' title='TikTok' aria-label='TikTok'
-          class='inline-flex items-center justify-center'>
-          <img src='/icon/tiktokicon.png' alt='TikTok' class='h-6 w-6 object-contain align-middle' loading='eager' />
-        </a>
-      </div>
-
-      <!-- Mobile: hamburger -->
-      <button class='md:hidden border-2 border-black px-3 py-2 rounded-lg flex flex-col gap-1.5' id='navToggle' aria-label='Toggle menu' aria-expanded='false'>
-        <span class='hamburger-line'></span>
-        <span class='hamburger-line'></span>
-        <span class='hamburger-line'></span>
-      </button>
     </div>
 
     <!-- Mobile menu overlay -->
@@ -135,13 +175,183 @@ const { pageTitle } = Astro.props;
 <style>
   .logo-image {
     display: block;
-    height: 2.25rem; /* 36px */
+    height: 2rem; /* 32px */
+    transition: height 0.3s ease;
   }
 
   @media (min-width: 768px) {
     .logo-image {
-      height: 2.75rem; /* 44px */
+      height: 2.25rem; /* 36px */
     }
+  }
+
+  /* Compact state when scrolled (desktop only) */
+  @media (min-width: 768px) {
+    .site-nav.scrolled .nav-bar {
+      padding-top: 0.375rem;
+      padding-bottom: 0.375rem;
+    }
+
+    .site-nav.scrolled .logo-image {
+      height: 1.5rem; /* 24px - really small */
+    }
+  }
+
+  /* Mobile: Always use compact size */
+  @media (max-width: 767px) {
+    .nav-bar {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .site-nav.scrolled .logo-image {
+      height: 2rem; /* Keep same size on mobile */
+    }
+    
+    .site-nav.scrolled .nav-bar {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    /* Smaller menu icon on mobile */
+    #navToggle {
+      padding: 0.5rem 0.625rem;
+    }
+
+    #navToggle .hamburger-line {
+      width: 20px;
+      height: 2px;
+    }
+
+    /* Adjust transform for smaller hamburger on mobile */
+    #navToggle[aria-expanded="true"] .hamburger-line:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    #navToggle[aria-expanded="true"] .hamburger-line:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Larger search icon on mobile */
+    .search-icon-button svg {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+  }
+
+  .site-nav.scrolled .search-container {
+    width: 180px;
+  }
+
+  .site-nav.scrolled .search-input {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    padding-right: 1.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.25;
+  }
+
+  .site-nav.scrolled .search-icon {
+    width: 0.75rem;
+    height: 0.75rem;
+    right: 0.5rem;
+  }
+
+  .site-nav.scrolled .links-wrapper a {
+    font-size: 0.875rem;
+  }
+
+  .site-nav.scrolled .links-wrapper img {
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+
+  .site-nav.scrolled .category-link {
+    font-size: 0.75rem;
+  }
+
+  .site-nav.scrolled .category-container {
+    padding: 0.375rem 0.5rem;
+  }
+
+  .site-nav.scrolled .top-row {
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-bar {
+    transition: padding 0.3s ease;
+  }
+
+  .search-wrapper {
+    width: fit-content;
+  }
+
+  .search-container {
+    width: 200px;
+    transition: width 0.3s ease;
+  }
+
+  .search-input {
+    width: 100%;
+    transition: padding 0.3s ease, font-size 0.3s ease;
+  }
+
+  .search-icon {
+    transition: width 0.3s ease, height 0.3s ease;
+  }
+
+  .logo-wrapper {
+    z-index: 10;
+  }
+
+  .links-wrapper {
+    width: fit-content;
+    margin-left: auto;
+  }
+
+  .links-wrapper a {
+    transition: font-size 0.3s ease;
+  }
+
+  .links-wrapper img {
+    transition: width 0.3s ease, height 0.3s ease;
+  }
+
+  .top-row {
+    transition: margin-bottom 0.3s ease;
+  }
+
+  .categories-row {
+    position: relative;
+  }
+
+  .category-container {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease, padding 0.3s ease;
+    flex: 1;
+    text-align: center;
+  }
+
+  .category-link {
+    transition: font-size 0.3s ease;
+  }
+
+  .category-container:hover {
+    background-color: rgba(252, 181, 91, 0.1);
+  }
+
+  .category-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  .category-dropdown {
+    top: 100%;
   }
 
   .hamburger-line {
@@ -162,6 +372,33 @@ const { pageTitle } = Astro.props;
   #navToggle[aria-expanded="true"] .hamburger-line:nth-child(3) {
     transform: rotate(-45deg) translate(6px, -6px);
   }
+
+  .search-icon-button {
+    transition: opacity 0.2s ease;
+  }
+
+  .search-icon-button:hover {
+    opacity: 0.7;
+  }
+
+  .search-icon-button:active {
+    opacity: 0.5;
+  }
+
+  .mobile-search-popup {
+    animation: slideDown 0.2s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>
 
 <script>
@@ -169,6 +406,7 @@ const { pageTitle } = Astro.props;
     const navBar = document.querySelector('.site-nav .nav-bar');
     const navToggle = document.getElementById('navToggle');
     const mobileMenu = document.getElementById('mobileMenu');
+    const searchInput = document.getElementById('productSearch');
 
     // Set mobile menu top position based on nav height
     const updateMobileMenuPosition = () => {
@@ -193,6 +431,109 @@ const { pageTitle } = Astro.props;
         updateMobileMenuPosition();
         mobileMenu?.classList.remove('hidden');
         navToggle?.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // Search functionality (desktop and mobile)
+    const setupSearch = (input: HTMLInputElement | null) => {
+      if (!input) return;
+      
+      let searchTimeout: ReturnType<typeof setTimeout>;
+      
+      input.addEventListener('input', (e) => {
+        const query = (e.target as HTMLInputElement).value.trim().toLowerCase();
+        
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          if (!query) {
+            // Dispatch event to reapply other filters (search cleared)
+            window.dispatchEvent(new CustomEvent('searchCleared'));
+            return;
+          }
+
+          // Dispatch search event for the homepage filter system to handle
+          window.dispatchEvent(new CustomEvent('searchPerformed', { detail: { query } }));
+        }, 300); // Debounce search
+      });
+    };
+
+    setupSearch(searchInput);
+
+    // Mobile search popup toggle
+    const mobileSearchToggle = document.getElementById('mobileSearchToggle');
+    const mobileSearchPopup = document.getElementById('mobileSearchPopup');
+    const searchInputMobilePopup = document.getElementById('productSearchMobilePopup') as HTMLInputElement;
+
+    if (mobileSearchToggle && mobileSearchPopup) {
+      const toggleSearchPopup = (open: boolean) => {
+        if (open) {
+          mobileSearchPopup.classList.remove('hidden');
+          mobileSearchToggle.setAttribute('aria-expanded', 'true');
+          // Focus the input when opened
+          setTimeout(() => {
+            searchInputMobilePopup?.focus();
+          }, 100);
+        } else {
+          mobileSearchPopup.classList.add('hidden');
+          mobileSearchToggle.setAttribute('aria-expanded', 'false');
+        }
+      };
+
+      mobileSearchToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !mobileSearchPopup.classList.contains('hidden');
+        toggleSearchPopup(!isOpen);
+      });
+
+      // Close search popup when menu is opened
+      navToggle?.addEventListener('click', () => {
+        if (!mobileMenu?.classList.contains('hidden')) {
+          toggleSearchPopup(false);
+        }
+      });
+
+      // Close search popup when clicking outside
+      document.addEventListener('click', (e) => {
+        if (mobileSearchPopup && !mobileSearchPopup.contains(e.target as Node) && 
+            mobileSearchToggle && !mobileSearchToggle.contains(e.target as Node)) {
+          toggleSearchPopup(false);
+        }
+      });
+
+      // Setup search for popup input
+      if (searchInputMobilePopup) {
+        setupSearch(searchInputMobilePopup);
+      }
+    }
+
+    // Scroll detection for compact nav
+    const header = document.getElementById('mainNav');
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > 50) {
+        header?.classList.add('scrolled');
+      } else {
+        header?.classList.remove('scrolled');
+      }
+      
+      lastScrollY = currentScrollY;
+    };
+
+    // Initial check
+    handleScroll();
+    
+    // Throttle scroll events
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
       }
     });
   });

@@ -117,14 +117,25 @@ const allProducts = await getProducts(baseUrl);
     // Get category from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const categoryFilter = urlParams.get('category')?.toLowerCase();
+    
+    let currentSearchQuery = '';
+    let currentTagFilters: string[] = [];
 
-    const applyFilters = (selectedFilters, category?: string) => {
+    const applyFilters = (selectedFilters: string[] = [], category?: string, searchQuery: string = '') => {
       const productWrappers = document.querySelectorAll('.product-card-wrapper');
       const active = Array.isArray(selectedFilters) ? selectedFilters.map(s => String(s).toLowerCase()) : [];
 
       productWrappers.forEach((wrapper) => {
         const tags = (wrapper.getAttribute('data-tags') || '').split(',').map(t => t.trim()).filter(Boolean);
         const categories = (wrapper.getAttribute('data-categories') || '').split(',').map(c => c.trim()).filter(Boolean);
+        const name = wrapper.querySelector('h3')?.textContent?.toLowerCase() || '';
+        const description = wrapper.querySelector('p')?.textContent?.toLowerCase() || '';
+
+        // Search filter
+        let searchMatch = true;
+        if (searchQuery) {
+          searchMatch = name.includes(searchQuery) || description.includes(searchQuery);
+        }
 
         // Category filter (from URL)
         let categoryMatch = true;
@@ -140,8 +151,8 @@ const allProducts = await getProducts(baseUrl);
           tagMatch = active.some(t => tags.includes(t));
         }
 
-        // Show if both category and tag filters match (or no filters applied)
-        if (categoryMatch && tagMatch) {
+        // Show if all filters match (search AND category AND tags)
+        if (searchMatch && categoryMatch && tagMatch) {
           wrapper.classList.remove('hidden');
         } else {
           wrapper.classList.add('hidden');
@@ -154,20 +165,29 @@ const allProducts = await getProducts(baseUrl);
       applyFilters([], categoryFilter);
     }
 
+    // Listen for search events
+    window.addEventListener('searchPerformed', ((e: CustomEvent) => {
+      currentSearchQuery = e.detail.query.toLowerCase();
+      applyFilters(currentTagFilters, categoryFilter || undefined, currentSearchQuery);
+    }) as EventListener);
+
+    window.addEventListener('searchCleared', () => {
+      currentSearchQuery = '';
+      applyFilters(currentTagFilters, categoryFilter || undefined, '');
+    });
+
     // Backward compatibility: single-select event
     window.addEventListener('filterSelected', ((e: CustomEvent) => {
       const selectedFilter = e.detail.filter;
-      if (selectedFilter === null) {
-        applyFilters([], categoryFilter || undefined);
-      } else {
-        applyFilters([selectedFilter], categoryFilter || undefined);
-      }
+      currentTagFilters = selectedFilter === null ? [] : [selectedFilter];
+      applyFilters(currentTagFilters, categoryFilter || undefined, currentSearchQuery);
     }) as EventListener);
 
     // New multi-select event
     window.addEventListener('filtersSelected', ((e: CustomEvent) => {
       const arr = Array.isArray(e.detail.filters) ? e.detail.filters : [];
-      applyFilters(arr, categoryFilter || undefined);
+      currentTagFilters = arr;
+      applyFilters(arr, categoryFilter || undefined, currentSearchQuery);
     }) as EventListener);
   });
 </script>
