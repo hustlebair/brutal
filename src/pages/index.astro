@@ -123,13 +123,10 @@ const allProducts = await getProducts(baseUrl);
         if (!active.length) {
           wrapper.classList.remove('hidden');
         } else {
-          // AND match: every selected tag must be present on the product
-          const matchesAll = active.every(t => tags.includes(t));
-          if (matchesAll) {
-            wrapper.classList.remove('hidden');
-          } else {
-            wrapper.classList.add('hidden');
-          }
+          // OR match: at least one of the selected tags must be present on the product
+          const matchesAny = active.some(t => tags.includes(t));
+          if (matchesAny) wrapper.classList.remove('hidden');
+          else wrapper.classList.add('hidden');
         }
       });
     };
