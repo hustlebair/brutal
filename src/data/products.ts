@@ -166,6 +166,15 @@ const staticProducts: Product[] = [
     primaryCategory: "🏠 Home & Office",
     tags: ["gifts-for-him", "under-50", "home-decor"],
   },
+  {
+    name: "Bubble Machine Gun For Kids",
+    description: "This Bubble Gun with 69 holes can generate more than thousands bubbles per minute with four colorful lights to bring you amazing effects, whatever day or night, you can see rich colorful bubbles are blown out when pressing the trigger, the fantastic lights render colorful bubbles, and you can enjoy a colorful scene at night day.",
+    image: "https://www.highestliked.com/bubblegun.jpg",
+    url: "https://amzn.to/4p9ok1z",
+    categories: ["🔥 Trending"],
+    primaryCategory: "🔥 Trending",
+    tags: ["gifts-for-kids", "under-20"],
+  },
 ];
 
 // Helper function to normalize image URLs
