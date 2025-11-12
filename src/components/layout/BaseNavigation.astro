@@ -143,7 +143,7 @@ const { pageTitle } = Astro.props;
     </div>
 
     <!-- Mobile menu overlay -->
-    <div class='md:hidden fixed left-0 right-0 bg-white z-50 hidden flex-col p-4 overflow-y-auto' id='mobileMenu' style='max-height: 70vh; box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.7);'>
+    <div class='md:hidden fixed left-0 right-0 bg-white z-50 hidden flex flex-col p-4 overflow-y-auto' id='mobileMenu' style='max-height: 70vh; box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.7);'>
       {navigationItems.map((item) => (
         <a class='block mb-3 px-4 py-3 bg-gray-100 rounded-lg font-semibold text-gray-900' href={item.url}>{item.name}</a>
       ))}
@@ -173,6 +173,11 @@ const { pageTitle } = Astro.props;
 </header>
 
 <style>
+  /* Mobile menu open state - override md:hidden */
+  #mobileMenu.menu-open {
+    display: flex !important;
+  }
+
   .logo-image {
     display: block;
     height: 2rem; /* 32px */
@@ -435,15 +440,71 @@ const { pageTitle } = Astro.props;
     updateMobileMenuPosition();
     window.addEventListener('resize', updateMobileMenuPosition);
 
-    navToggle?.addEventListener('click', () => {
-      const isOpen = !mobileMenu?.classList.contains('hidden');
-      if (isOpen) {
-        mobileMenu?.classList.add('hidden');
-        navToggle?.setAttribute('aria-expanded', 'false');
-      } else {
+    // Mobile menu toggle function
+    const toggleMobileMenu = (open: boolean) => {
+      if (!mobileMenu || !navToggle) return;
+      
+      if (open) {
         updateMobileMenuPosition();
-        mobileMenu?.classList.remove('hidden');
-        navToggle?.setAttribute('aria-expanded', 'true');
+        mobileMenu.classList.remove('hidden');
+        mobileMenu.classList.add('menu-open');
+        navToggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        
+        // Close search popup if open
+        const mobileSearchPopup = document.getElementById('mobileSearchPopup');
+        const mobileSearchToggle = document.getElementById('mobileSearchToggle');
+        if (mobileSearchPopup && !mobileSearchPopup.classList.contains('hidden')) {
+          mobileSearchPopup.classList.add('hidden');
+          mobileSearchToggle?.setAttribute('aria-expanded', 'false');
+        }
+      } else {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('menu-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    };
+
+    // Hamburger menu toggle
+    navToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const isOpen = !mobileMenu?.classList.contains('hidden');
+      toggleMobileMenu(!isOpen);
+    });
+
+    // Close menu when clicking outside (with slight delay to avoid conflicts)
+    let clickOutsideTimeout: ReturnType<typeof setTimeout> | null = null;
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu || !navToggle) return;
+      
+      const isMenuOpen = !mobileMenu.classList.contains('hidden');
+      if (!isMenuOpen) return;
+      
+      // Clear any pending timeout
+      if (clickOutsideTimeout) {
+        clearTimeout(clickOutsideTimeout);
+      }
+      
+      // Small delay to ensure toggle click is processed first
+      clickOutsideTimeout = setTimeout(() => {
+        // Check if click is outside menu and toggle button
+        const clickedInsideMenu = mobileMenu.contains(e.target as Node);
+        const clickedOnToggle = navToggle.contains(e.target as Node);
+        
+        if (!clickedInsideMenu && !clickedOnToggle) {
+          toggleMobileMenu(false);
+        }
+      }, 10);
+    });
+
+    // Close menu when clicking on menu links (good UX)
+    mobileMenu?.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      // If clicking on a link, close the menu
+      if (target.tagName === 'A' || target.closest('a')) {
+        toggleMobileMenu(false);
       }
     });
 
@@ -499,11 +560,7 @@ const { pageTitle } = Astro.props;
       });
 
       // Close search popup when menu is opened
-      navToggle?.addEventListener('click', () => {
-        if (!mobileMenu?.classList.contains('hidden')) {
-          toggleSearchPopup(false);
-        }
-      });
+      // Note: This is handled by the main navToggle click handler above
 
       // Close search popup when clicking outside
       document.addEventListener('click', (e) => {
@@ -521,79 +578,79 @@ const { pageTitle } = Astro.props;
 
     // Scroll detection for compact nav - only initialize once per header element
     const header = document.getElementById('mainNav');
-    if (!header || initializedHeaders.has(header)) return;
-    
-    initializedHeaders.add(header);
-    
-    let isScrolled = false;
-    let lastScrollY = window.scrollY;
-    let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
-    const SCROLL_THRESHOLD_DOWN = 60; // When scrolling down, activate at 60px
-    const SCROLL_THRESHOLD_UP = 40; // When scrolling up, deactivate at 40px (hysteresis)
-    
-    let isTransitioning = false;
+    if (header && !initializedHeaders.has(header)) {
+      initializedHeaders.add(header);
+      
+      let isScrolled = false;
+      let lastScrollY = window.scrollY;
+      let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
+      const SCROLL_THRESHOLD_DOWN = 60; // When scrolling down, activate at 60px
+      const SCROLL_THRESHOLD_UP = 40; // When scrolling up, deactivate at 40px (hysteresis)
+      
+      let isTransitioning = false;
 
-    const handleScroll = () => {
-      // Prevent handling scroll during transitions to avoid feedback loops
-      if (isTransitioning) return;
-      
-      const currentScrollY = window.scrollY;
-      const scrollDelta = Math.abs(currentScrollY - lastScrollY);
-      
-      // Ignore tiny scroll movements that might be caused by layout shifts
-      if (scrollDelta < 1) return;
-      
-      lastScrollY = currentScrollY;
-      
-      // Use different thresholds for scrolling up vs down to prevent flickering
-      const shouldBeScrolled = currentScrollY > SCROLL_THRESHOLD_DOWN;
-      
-      if (shouldBeScrolled !== isScrolled) {
-        isTransitioning = true;
-        isScrolled = shouldBeScrolled;
+      const handleScroll = () => {
+        // Prevent handling scroll during transitions to avoid feedback loops
+        if (isTransitioning) return;
         
-        // Use requestAnimationFrame to ensure DOM is ready
-        requestAnimationFrame(() => {
-          if (isScrolled) {
-            header.classList.add('scrolled');
-          } else {
-            header.classList.remove('scrolled');
-          }
+        const currentScrollY = window.scrollY;
+        const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+        
+        // Ignore tiny scroll movements that might be caused by layout shifts
+        if (scrollDelta < 1) return;
+        
+        lastScrollY = currentScrollY;
+        
+        // Use different thresholds for scrolling up vs down to prevent flickering
+        const shouldBeScrolled = currentScrollY > SCROLL_THRESHOLD_DOWN;
+        
+        if (shouldBeScrolled !== isScrolled) {
+          isTransitioning = true;
+          isScrolled = shouldBeScrolled;
           
-          // Allow transitions to complete before handling scroll again
-          setTimeout(() => {
-            isTransitioning = false;
-          }, 350); // Slightly longer than CSS transition (300ms)
-        });
-      }
-    };
+          // Use requestAnimationFrame to ensure DOM is ready
+          requestAnimationFrame(() => {
+            if (isScrolled) {
+              header.classList.add('scrolled');
+            } else {
+              header.classList.remove('scrolled');
+            }
+            
+            // Allow transitions to complete before handling scroll again
+            setTimeout(() => {
+              isTransitioning = false;
+            }, 350); // Slightly longer than CSS transition (300ms)
+          });
+        }
+      };
 
-    // Debounced scroll handler to prevent excessive calls
-    const debouncedHandleScroll = () => {
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-      scrollTimeout = setTimeout(() => {
-        requestAnimationFrame(handleScroll);
-      }, 10); // Small debounce to batch rapid scroll events
-    };
+      // Debounced scroll handler to prevent excessive calls
+      const debouncedHandleScroll = () => {
+        if (scrollTimeout) {
+          clearTimeout(scrollTimeout);
+        }
+        scrollTimeout = setTimeout(() => {
+          requestAnimationFrame(handleScroll);
+        }, 10); // Small debounce to batch rapid scroll events
+      };
 
-    // Initial check - set state immediately without transition
-    const initialScrollY = window.scrollY;
-    if (initialScrollY > SCROLL_THRESHOLD_DOWN) {
-      isScrolled = true;
-      header.classList.add('scrolled');
-      lastScrollY = initialScrollY;
-    } else {
-      isScrolled = false;
-      header.classList.remove('scrolled');
-      lastScrollY = initialScrollY;
+      // Initial check - set state immediately without transition
+      const initialScrollY = window.scrollY;
+      if (initialScrollY > SCROLL_THRESHOLD_DOWN) {
+        isScrolled = true;
+        header.classList.add('scrolled');
+        lastScrollY = initialScrollY;
+      } else {
+        isScrolled = false;
+        header.classList.remove('scrolled');
+        lastScrollY = initialScrollY;
+      }
+      
+      // Wait for initial render to complete before enabling transitions
+      requestAnimationFrame(() => {
+        // Add scroll listener with passive flag for better performance
+        window.addEventListener('scroll', debouncedHandleScroll, { passive: true });
+      });
     }
-    
-    // Wait for initial render to complete before enabling transitions
-    requestAnimationFrame(() => {
-      // Add scroll listener with passive flag for better performance
-      window.addEventListener('scroll', debouncedHandleScroll, { passive: true });
-    });
   });
 </script>
