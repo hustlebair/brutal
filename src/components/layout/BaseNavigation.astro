@@ -177,6 +177,7 @@ const { pageTitle } = Astro.props;
     display: block;
     height: 2rem; /* 32px */
     transition: height 0.3s ease;
+    will-change: height;
   }
 
   @media (min-width: 768px) {
@@ -281,6 +282,13 @@ const { pageTitle } = Astro.props;
 
   .nav-bar {
     transition: padding 0.3s ease;
+    will-change: padding;
+  }
+  
+  .site-nav {
+    will-change: transform;
+    transform: translateZ(0); /* Force hardware acceleration */
+    contain: style paint; /* Prevent repaints from affecting parent, but allow layout for sticky */
   }
 
   .search-wrapper {
@@ -290,6 +298,7 @@ const { pageTitle } = Astro.props;
   .search-container {
     width: 200px;
     transition: width 0.3s ease;
+    will-change: width;
   }
 
   .search-input {
@@ -320,6 +329,7 @@ const { pageTitle } = Astro.props;
 
   .top-row {
     transition: margin-bottom 0.3s ease;
+    will-change: margin-bottom;
   }
 
   .categories-row {
@@ -402,11 +412,14 @@ const { pageTitle } = Astro.props;
 </style>
 
 <script>
+  // Prevent multiple initializations - use a WeakSet to track initialized headers
+  const initializedHeaders = new WeakSet<HTMLElement>();
+  
   document.addEventListener('astro:page-load', () => {
     const navBar = document.querySelector('.site-nav .nav-bar');
     const navToggle = document.getElementById('navToggle');
     const mobileMenu = document.getElementById('mobileMenu');
-    const searchInput = document.getElementById('productSearch');
+    const searchInput = document.getElementById('productSearch') as HTMLInputElement | null;
 
     // Set mobile menu top position based on nav height
     const updateMobileMenuPosition = () => {
@@ -506,38 +519,81 @@ const { pageTitle } = Astro.props;
       }
     }
 
-    // Scroll detection for compact nav
+    // Scroll detection for compact nav - only initialize once per header element
     const header = document.getElementById('mainNav');
+    if (!header || initializedHeaders.has(header)) return;
+    
+    initializedHeaders.add(header);
+    
     let isScrolled = false;
+    let lastScrollY = window.scrollY;
+    let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
     const SCROLL_THRESHOLD_DOWN = 60; // When scrolling down, activate at 60px
     const SCROLL_THRESHOLD_UP = 40; // When scrolling up, deactivate at 40px (hysteresis)
+    
+    let isTransitioning = false;
 
     const handleScroll = () => {
+      // Prevent handling scroll during transitions to avoid feedback loops
+      if (isTransitioning) return;
+      
       const currentScrollY = window.scrollY;
+      const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+      
+      // Ignore tiny scroll movements that might be caused by layout shifts
+      if (scrollDelta < 1) return;
+      
+      lastScrollY = currentScrollY;
       
       // Use different thresholds for scrolling up vs down to prevent flickering
-      if (!isScrolled && currentScrollY > SCROLL_THRESHOLD_DOWN) {
-        isScrolled = true;
-        header?.classList.add('scrolled');
-      } else if (isScrolled && currentScrollY < SCROLL_THRESHOLD_UP) {
-        isScrolled = false;
-        header?.classList.remove('scrolled');
+      const shouldBeScrolled = currentScrollY > SCROLL_THRESHOLD_DOWN;
+      
+      if (shouldBeScrolled !== isScrolled) {
+        isTransitioning = true;
+        isScrolled = shouldBeScrolled;
+        
+        // Use requestAnimationFrame to ensure DOM is ready
+        requestAnimationFrame(() => {
+          if (isScrolled) {
+            header.classList.add('scrolled');
+          } else {
+            header.classList.remove('scrolled');
+          }
+          
+          // Allow transitions to complete before handling scroll again
+          setTimeout(() => {
+            isTransitioning = false;
+          }, 350); // Slightly longer than CSS transition (300ms)
+        });
       }
     };
 
-    // Initial check
-    handleScroll();
-    
-    // Throttle scroll events
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
+    // Debounced scroll handler to prevent excessive calls
+    const debouncedHandleScroll = () => {
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
       }
-    }, { passive: true });
+      scrollTimeout = setTimeout(() => {
+        requestAnimationFrame(handleScroll);
+      }, 10); // Small debounce to batch rapid scroll events
+    };
+
+    // Initial check - set state immediately without transition
+    const initialScrollY = window.scrollY;
+    if (initialScrollY > SCROLL_THRESHOLD_DOWN) {
+      isScrolled = true;
+      header.classList.add('scrolled');
+      lastScrollY = initialScrollY;
+    } else {
+      isScrolled = false;
+      header.classList.remove('scrolled');
+      lastScrollY = initialScrollY;
+    }
+    
+    // Wait for initial render to complete before enabling transitions
+    requestAnimationFrame(() => {
+      // Add scroll listener with passive flag for better performance
+      window.addEventListener('scroll', debouncedHandleScroll, { passive: true });
+    });
   });
 </script>
