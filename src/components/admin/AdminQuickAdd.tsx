@@ -13,7 +13,7 @@ const DEFAULT_CATEGORIES = [
 
 // Grouped suggested tags
 const TAGS_PRICE = ['under-20', '20-50', '50-100', 'over-100'];
-const TAGS_RECIPIENT = ['for-him', 'for-her', 'for-kids', 'for-everyone'];
+const TAGS_RECIPIENT = ['for-him', 'for-her', 'for-kids'];
 const TAGS_CONTEXT = [
   'viral',
   'funny',

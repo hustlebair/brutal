@@ -211,6 +211,24 @@ const staticProducts: Product[] = [
     primaryCategory: "cat-home-stuff",
     tags: ["20-50", "for-him", "fathers-day", "useful"],
   },
+  {
+    name: "Flexible Dinosaur Race Track",
+    description: "This dinosaur track toy provides a flexible track that can be bent, rotated, and adjusted to create a unique layout. Children can use their imagination to design their own dinosaur world, enhance their hands-on abilities, and enjoy endless fun. 255+ flexible tracks, 2 dinosaur racing cars, 8 dinosaur models, 2 unpowered dinos cars, 1 bridge, 4 bridge lights, and related accessories.",
+    image: "https://www.highestliked.com/dinotrack.jpg",
+    url: "https://amzn.to/47WRTfK",
+    categories: ["cat-home-stuff"],
+    primaryCategory: "cat-home-stuff",
+    tags: ["20-50", "for-kids", "birthday", "christmas"],
+  },
+  {
+    name: "ATM Piggy Bank For Real Money",
+    description: "Comes with a debit card and ability to create your own PIN code. Built-in data saves your code and balance even if you switch batteries. The coin slot can read each coin and display what the coin has been deposited and count into your balance, which helps you to track the balance intelligently. Set goals and save in a fun way",
+    image: "https://www.highestliked.com/atm.jpg",
+    url: "https://amzn.to/3LA45LV",
+    categories: ["cat-cool-tech"],
+    primaryCategory: "cat-cool-tech",
+    tags: ["20-50", "for-him", "for-her", "for-kids"],
+  },
 ];
 
 // Helper function to normalize image URLs

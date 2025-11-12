@@ -36,21 +36,48 @@ const allProducts = await getProducts(baseUrl);
       <GradientDotsBackground client:load />
       <div class="max-w-7xl mx-auto relative z-10">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="product-grid">
-          {allProducts.map((product: Product) => (
-            <div
-              class="product-card-wrapper"
-              data-tags={product.tags?.map(t => t.toLowerCase()).join(',') || ''}
-              data-categories={[...(product.categories || []), product.primaryCategory].filter(Boolean).map(c => c.toLowerCase()).join(',')}
-            >
-              <ProductCard
-                name={product.name}
-                description={product.description}
-                image={product.image}
-                url={product.url}
-                primaryCategory={product.primaryCategory}
-              />
-            </div>
-          ))}
+          {allProducts.map((product: Product) => {
+            // Extract price range from tags - ONLY match specific price patterns
+            const priceTag = product.tags?.find(tag => {
+              // Match: under-20, under-50, under-100
+              if (/^under-\d+$/.test(tag)) return true;
+              // Match: over-100, over-50, etc
+              if (/^over-\d+$/.test(tag)) return true;
+              // Match: 20-50, 50-100 (number-number format ONLY)
+              if (/^\d+-\d+$/.test(tag)) return true;
+              return false;
+            });
+            
+            // Format price label
+            let priceLabel;
+            if (priceTag) {
+              if (priceTag.startsWith('under-')) {
+                priceLabel = `under $${priceTag.replace('under-', '')}`;
+              } else if (priceTag.startsWith('over-')) {
+                priceLabel = `over $${priceTag.replace('over-', '')}`;
+              } else if (/^\d+-\d+$/.test(priceTag)) {
+                const parts = priceTag.split('-');
+                priceLabel = `$${parts[0]}-$${parts[1]}`;
+              }
+            }
+            
+            return (
+              <div
+                class="product-card-wrapper"
+                data-tags={product.tags?.map(t => t.toLowerCase()).join(',') || ''}
+                data-categories={[...(product.categories || []), product.primaryCategory].filter(Boolean).map(c => c.toLowerCase()).join(',')}
+              >
+                <ProductCard
+                  name={product.name}
+                  description={product.description}
+                  image={product.image}
+                  url={product.url}
+                  primaryCategory={product.primaryCategory}
+                  price={priceLabel}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

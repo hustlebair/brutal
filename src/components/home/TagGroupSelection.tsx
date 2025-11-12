@@ -21,7 +21,6 @@ const RECIPIENT_FILTERS: ChipFilter[] = [
   { id: 'rcp-for-him', label: 'for him', filterTag: 'gifts-for-him' },
   { id: 'rcp-for-her', label: 'for her', filterTag: 'gifts-for-her' },
   { id: 'rcp-for-kids', label: 'for kids', filterTag: 'gifts-for-kids' },
-  { id: 'rcp-for-everyone', label: 'for everyone', filterTag: 'for-everyone' },
 ];
 
 export default function TagGroupSelection({ onFilterSelect }: TagGroupSelectionProps) {

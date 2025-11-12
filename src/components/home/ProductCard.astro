@@ -6,9 +6,10 @@ interface Props {
   url: string;
   category?: string; // For backward compatibility, accepts primaryCategory
   primaryCategory?: string;
+  price?: string;
 }
 
-const { name, description, image, url, category, primaryCategory } = Astro.props;
+const { name, description, image, url, category, primaryCategory, price } = Astro.props;
 const displayCategory = primaryCategory || category;
 ---
 
@@ -27,20 +28,27 @@ const displayCategory = primaryCategory || category;
     />
   </div>
   <div class="p-2.5">
-    <p class="dm-sans text-gray-700 text-sm md:text-base mb-4 line-clamp-5">
+    <p class="dm-sans text-gray-700 text-sm md:text-base mb-2 line-clamp-5">
       {description}
     </p>
-    <div class="flex items-center justify-between">
-      {displayCategory && (
-        <span class="dm-sans text-xs font-semibold text-[#FCB55B] uppercase tracking-wide">
-          {displayCategory}
-        </span>
-      )}
+    <div class="flex items-end justify-between gap-3">
+      <div class="flex flex-col gap-1 flex-1">
+        {displayCategory && (
+          <span class="pill-tag category-pill poppins uppercase tracking-wide">
+            {displayCategory}
+          </span>
+        )}
+        {price && (
+          <span class="pill-tag price-pill poppins">
+            {price}
+          </span>
+        )}
+      </div>
       <a
         href={url}
         target="_blank"
         rel="noopener noreferrer sponsored"
-        class="cartoon-button dm-sans ml-auto inline-flex items-center gap-2"
+        class="cartoon-button poppins inline-flex items-center gap-2"
       >
         CHECK IT OUT
         <span>→</span>
@@ -56,6 +64,40 @@ const displayCategory = primaryCategory || category;
 
   .dm-sans {
     font-family: "DM Sans", sans-serif;
+  }
+
+  .poppins {
+    font-family: "Poppins", sans-serif;
+  }
+
+  .pill-tag {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: fit-content;
+    font-size: 0.7rem;
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  .category-pill {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+  }
+
+  .price-pill {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+  }
+
+  @media (min-width: 768px) {
+    .pill-tag {
+      padding: 0.25rem 0.6rem;
+      font-size: 0.75rem;
+    }
   }
 
   .cartoon-button {
@@ -76,6 +118,7 @@ const displayCategory = primaryCategory || category;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    flex-shrink: 0;
   }
 
   .cartoon-button:hover {
