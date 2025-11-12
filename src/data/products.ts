@@ -202,6 +202,15 @@ const staticProducts: Product[] = [
     primaryCategory: "cat-adventure",
     tags: ["under-50"],
   },
+  {
+    name: "Rechargeable AA Batteries with Charger",
+    description: "Having to buy batteries over and over is basically a subscription model. Takes 2 hours to fully recharge 8 AA batteries. Up to 1600 recharges, that breaks down to 1/5th of a penny per battery. Perfect for blink cameras, xbox controllers, motorized toys, smart home devices and much more.",
+    image: "https://www.highestliked.com/rechargable.jpg",
+    url: "https://amzn.to/47Bi10D",
+    categories: ["cat-cool-tech", "cat-home-stuff"],
+    primaryCategory: "cat-home-stuff",
+    tags: ["20-50", "for-him", "fathers-day", "useful"],
+  },
 ];
 
 // Helper function to normalize image URLs
