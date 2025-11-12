@@ -25,9 +25,9 @@ const { pageTitle } = Astro.props;
   {pageTitle && <h1 class='hidden'>{pageTitle}</h1>}
   <div class='container mx-auto px-4'>
     <div class='nav-bar py-3'>
-      <!-- Top Row: Search, Logo, Links -->
+      <!-- Top Row -->
       <div class='relative flex items-center justify-between mb-3 top-row'>
-        <!-- Desktop: Left Search Bar -->
+        <!-- Desktop: Search Bar -->
         <div class='hidden md:block search-wrapper'>
           <div class='search-container relative'>
             <input
@@ -42,27 +42,27 @@ const { pageTitle } = Astro.props;
           </div>
         </div>
 
-        <!-- Mobile: Left Search Icon Button -->
-        <button class='md:hidden search-icon-button p-2' id='mobileSearchToggle' aria-label='Toggle search' aria-expanded='false'>
+        <!-- Mobile: Search Icon Button -->
+        <button class='md:hidden p-2' id='mobileSearchToggle' aria-label='Toggle search' aria-expanded='false'>
           <svg class='w-6 h-6 text-gray-700' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
             <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
           </svg>
         </button>
 
         <!-- Center: Logo (absolutely centered) -->
-        <div class='absolute left-1/2 -translate-x-1/2 logo-wrapper'>
-          <a href='/' title='Back to Home' class='block'>
+        <div class='absolute left-1/2 -translate-x-1/2 pointer-events-none'>
+          <a href='/' title='Back to Home' class='block pointer-events-auto'>
             <img 
               src='/highestlikedlogo.png' 
               alt='Highest Liked' 
-              class='logo-image w-auto object-contain'
+              class='logo-image h-8 md:h-9 w-auto object-contain'
               loading='eager'
             />
           </a>
         </div>
 
-        <!-- Desktop: Right Links -->
-        <div class='hidden md:flex items-center gap-6 links-wrapper'>
+        <!-- Desktop: Navigation Links -->
+        <div class='hidden md:flex items-center gap-6'>
           {navigationItems.map((item) => (
             <a
               class='poppins text-base font-semibold hover:text-[#FCB55B] transition-colors'
@@ -72,100 +72,61 @@ const { pageTitle } = Astro.props;
               {item.name}
             </a>
           ))}
-          <a href={tiktokUrl} target='_blank' title='TikTok' aria-label='TikTok'
-            class='inline-flex items-center justify-center'>
-            <img src='/icon/tiktokicon.png' alt='TikTok' class='h-6 w-6 object-contain align-middle' loading='eager' />
+          <a href={tiktokUrl} target='_blank' title='TikTok' aria-label='TikTok' class='inline-flex items-center justify-center'>
+            <img src='/icon/tiktokicon.png' alt='TikTok' class='h-6 w-6 object-contain' loading='eager' />
           </a>
         </div>
 
-        <!-- Mobile: Right Menu Button -->
-        <button class='md:hidden border-2 border-black px-3 py-2 rounded-lg flex flex-col gap-1.5' id='navToggle' aria-label='Toggle menu' aria-expanded='false'>
-          <span class='hamburger-line'></span>
-          <span class='hamburger-line'></span>
-          <span class='hamburger-line'></span>
+        <!-- Mobile: Hamburger Menu Button -->
+        <button class='md:hidden border-2 border-black px-3 py-2 rounded-lg' id='navToggle' aria-label='Toggle menu' aria-expanded='false'>
+          <div class='flex flex-col gap-1.5'>
+            <span class='hamburger-line'></span>
+            <span class='hamburger-line'></span>
+            <span class='hamburger-line'></span>
+          </div>
         </button>
       </div>
 
-      <!-- Mobile: Popup Search Form -->
-      <div class='md:hidden mobile-search-popup hidden' id='mobileSearchPopup'>
-        <div class='search-popup-container relative mt-2'>
+      <!-- Mobile: Search Popup -->
+      <div class='md:hidden hidden mb-3' id='mobileSearchPopup'>
+        <div class='relative'>
           <input
             type='text'
-            id='productSearchMobilePopup'
+            id='productSearchMobile'
             placeholder='Search products...'
-            class='search-input w-full px-4 py-2 pr-10 border-2 border-gray-300 rounded-lg focus:border-[#FCB55B] focus:outline-none'
+            class='w-full px-4 py-2 pr-10 border-2 border-gray-300 rounded-lg focus:border-[#FCB55B] focus:outline-none'
           />
-          <svg class='search-icon absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+          <svg class='absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
             <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
           </svg>
         </div>
       </div>
 
-      <!-- Categories Row: Evenly Spaced -->
+      <!-- Desktop: Categories Row -->
       <div class='hidden md:flex items-center justify-between w-full categories-row'>
         {categories.map((cat) => {
-          const hasChildren = Array.isArray(cat.items) && cat.items.length > 0;
           const categoryUrl = `/?category=${encodeURIComponent(cat.name)}`;
           return (
-            <div class='category-container relative group flex-1 text-center'>
-              {hasChildren ? (
-                <>
-                  <button class='category-link poppins text-sm font-semibold hover:text-[#FCB55B] transition-colors'>
-                    {cat.name}
-                    <span class='ml-1'>▾</span>
-                  </button>
-                  <div class='category-dropdown absolute left-1/2 -translate-x-1/2 mt-2 hidden group-hover:block bg-white border-2 border-black rounded-xl shadow-lg min-w-[220px] z-50'>
-                    <ul class='p-2'>
-                      <li>
-                        <a href={categoryUrl} class='block px-4 py-2 text-sm hover:bg-[#FFF4E5] rounded-lg font-semibold'>
-                          View All {cat.name}
-                        </a>
-                      </li>
-                      {cat.items.map((sub) => (
-                        <li>
-                          <a href={sub.url} class='block px-4 py-2 text-sm hover:bg-[#FFF4E5] rounded-lg'>
-                            {sub.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </>
-              ) : (
-                <a href={categoryUrl} class='category-link poppins text-sm font-semibold hover:text-[#FCB55B] transition-colors'>
-                  {cat.name}
-                </a>
-              )}
-            </div>
+            <a href={categoryUrl} class='category-link poppins text-sm font-semibold hover:text-[#FCB55B] transition-colors px-4 py-2 rounded-lg hover:bg-[#FFF4E5]'>
+              {cat.name}
+            </a>
           );
         })}
       </div>
     </div>
+  </div>
 
-    <!-- Mobile menu overlay -->
-    <div class='md:hidden fixed left-0 right-0 bg-white z-50 hidden flex flex-col p-4 overflow-y-auto' id='mobileMenu' style='max-height: 70vh; box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.7);'>
+  <!-- Mobile Menu Overlay -->
+  <div class='md:hidden fixed inset-x-0 bg-white border-t-2 border-black shadow-xl hidden' id='mobileMenu'>
+    <div class='p-4 max-h-[70vh] overflow-y-auto'>
       {navigationItems.map((item) => (
-        <a class='block mb-3 px-4 py-3 bg-gray-100 rounded-lg font-semibold text-gray-900' href={item.url}>{item.name}</a>
+        <a class='block mb-3 px-4 py-3 bg-gray-100 rounded-lg font-semibold text-gray-900 hover:bg-gray-200' href={item.url}>{item.name}</a>
       ))}
-      <a class='block mb-3 px-4 py-3 bg-gray-100 rounded-lg font-semibold text-gray-900' href={tiktokUrl} target='_blank'>TikTok</a>
+      <a class='block mb-3 px-4 py-3 bg-gray-100 rounded-lg font-semibold text-gray-900 hover:bg-gray-200' href={tiktokUrl} target='_blank'>TikTok</a>
       {categories.map((cat) => {
-        const hasChildren = Array.isArray(cat.items) && cat.items.length > 0;
         const categoryUrl = `/?category=${encodeURIComponent(cat.name)}`;
-        return hasChildren ? (
-          <details class='mb-3 bg-gray-100 rounded-lg'>
-            <summary class='block px-4 py-3 font-semibold cursor-pointer rounded-lg list-none text-gray-900 flex items-center justify-between'>
-              <span>{cat.name}</span>
-              <span class='ml-2'>▾</span>
-            </summary>
-            <ul class='px-4 pb-3 pt-0 space-y-1'>
-              <li><a class='block px-2 py-2 text-sm rounded text-gray-700 font-semibold' href={categoryUrl}>View All {cat.name}</a></li>
-              {cat.items.map((sub) => (
-                <li><a class='block px-2 py-2 text-sm rounded text-gray-700' href={sub.url}>{sub.name}</a></li>
-              ))}
-            </ul>
-          </details>
-        ) : (
-          <a class='block mb-3 px-4 py-3 bg-gray-100 rounded-lg font-semibold text-gray-900' href={categoryUrl}>{cat.name}</a>
+        return (
+          <a class='block mb-3 px-4 py-3 bg-gray-100 rounded-lg font-semibold text-gray-900 hover:bg-gray-200' href={categoryUrl}>{cat.name}</a>
         );
       })}
     </div>
@@ -173,22 +134,12 @@ const { pageTitle } = Astro.props;
 </header>
 
 <style>
-  /* Mobile menu open state - override md:hidden */
-  #mobileMenu.menu-open {
-    display: flex !important;
-  }
-
   .logo-image {
-    display: block;
-    height: 2rem; /* 32px */
     transition: height 0.3s ease;
-    will-change: height;
   }
 
-  @media (min-width: 768px) {
-    .logo-image {
-      height: 2.25rem; /* 36px */
-    }
+  .nav-bar {
+    transition: padding 0.3s ease;
   }
 
   /* Compact state when scrolled (desktop only) */
@@ -199,111 +150,33 @@ const { pageTitle } = Astro.props;
     }
 
     .site-nav.scrolled .logo-image {
-      height: 1.5rem; /* 24px - really small */
-    }
-  }
-
-  /* Mobile: Always use compact size */
-  @media (max-width: 767px) {
-    .nav-bar {
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
+      height: 1.5rem;
     }
 
-    .site-nav.scrolled .logo-image {
-      height: 2rem; /* Keep same size on mobile */
-    }
-    
-    .site-nav.scrolled .nav-bar {
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
+    .site-nav.scrolled .search-container {
+      width: 180px;
     }
 
-    /* Smaller menu icon on mobile */
-    #navToggle {
-      padding: 0.5rem 0.625rem;
+    .site-nav.scrolled .search-input {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      padding-left: 0.5rem;
+      font-size: 0.8125rem;
     }
 
-    #navToggle .hamburger-line {
-      width: 20px;
-      height: 2px;
+    .site-nav.scrolled .category-link {
+      font-size: 0.75rem;
+      padding: 0.375rem 0.5rem;
     }
 
-    /* Adjust transform for smaller hamburger on mobile */
-    #navToggle[aria-expanded="true"] .hamburger-line:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
+    .site-nav.scrolled .top-row {
+      margin-bottom: 0.5rem;
     }
-
-    #navToggle[aria-expanded="true"] .hamburger-line:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
-    }
-
-    /* Larger search icon on mobile */
-    .search-icon-button svg {
-      width: 1.75rem;
-      height: 1.75rem;
-    }
-  }
-
-  .site-nav.scrolled .search-container {
-    width: 180px;
-  }
-
-  .site-nav.scrolled .search-input {
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    padding-left: 0.5rem;
-    padding-right: 1.75rem;
-    font-size: 0.8125rem;
-    line-height: 1.25;
-  }
-
-  .site-nav.scrolled .search-icon {
-    width: 0.75rem;
-    height: 0.75rem;
-    right: 0.5rem;
-  }
-
-  .site-nav.scrolled .links-wrapper a {
-    font-size: 0.875rem;
-  }
-
-  .site-nav.scrolled .links-wrapper img {
-    height: 1.25rem;
-    width: 1.25rem;
-  }
-
-  .site-nav.scrolled .category-link {
-    font-size: 0.75rem;
-  }
-
-  .site-nav.scrolled .category-container {
-    padding: 0.375rem 0.5rem;
-  }
-
-  .site-nav.scrolled .top-row {
-    margin-bottom: 0.5rem;
-  }
-
-  .nav-bar {
-    transition: padding 0.3s ease;
-    will-change: padding;
-  }
-  
-  .site-nav {
-    will-change: transform;
-    transform: translateZ(0); /* Force hardware acceleration */
-    contain: style paint; /* Prevent repaints from affecting parent, but allow layout for sticky */
-  }
-
-  .search-wrapper {
-    width: fit-content;
   }
 
   .search-container {
     width: 200px;
     transition: width 0.3s ease;
-    will-change: width;
   }
 
   .search-input {
@@ -311,73 +184,19 @@ const { pageTitle } = Astro.props;
     transition: padding 0.3s ease, font-size 0.3s ease;
   }
 
-  .search-icon {
-    transition: width 0.3s ease, height 0.3s ease;
-  }
-
-  .logo-wrapper {
-    z-index: 10;
-  }
-
-  .links-wrapper {
-    width: fit-content;
-    margin-left: auto;
-  }
-
-  .links-wrapper a {
-    transition: font-size 0.3s ease;
-  }
-
-  .links-wrapper img {
-    transition: width 0.3s ease, height 0.3s ease;
-  }
-
   .top-row {
     transition: margin-bottom 0.3s ease;
-    will-change: margin-bottom;
-  }
-
-  .categories-row {
-    position: relative;
-  }
-
-  .category-container {
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
-    transition: background-color 0.2s ease, padding 0.3s ease;
-    flex: 1;
-    text-align: center;
-  }
-
-  .category-link {
-    transition: font-size 0.3s ease;
-  }
-
-  .category-container:hover {
-    background-color: rgba(252, 181, 91, 0.1);
-  }
-
-  .category-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    width: 100%;
-  }
-
-  .category-dropdown {
-    top: 100%;
   }
 
   .hamburger-line {
-    width: 24px;
+    width: 20px;
     height: 2px;
     background-color: #000;
     transition: all 0.3s ease;
   }
 
   #navToggle[aria-expanded="true"] .hamburger-line:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
+    transform: rotate(45deg) translate(5px, 5px);
   }
 
   #navToggle[aria-expanded="true"] .hamburger-line:nth-child(2) {
@@ -385,130 +204,26 @@ const { pageTitle } = Astro.props;
   }
 
   #navToggle[aria-expanded="true"] .hamburger-line:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
+    transform: rotate(-45deg) translate(5px, -5px);
   }
 
-  .search-icon-button {
-    transition: opacity 0.2s ease;
-  }
-
-  .search-icon-button:hover {
-    opacity: 0.7;
-  }
-
-  .search-icon-button:active {
-    opacity: 0.5;
-  }
-
-  .mobile-search-popup {
-    animation: slideDown 0.2s ease-out;
-  }
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  /* Mobile menu open state */
+  #mobileMenu.menu-open {
+    display: block !important;
   }
 </style>
 
 <script>
-  // Prevent multiple initializations - use a WeakSet to track initialized headers
-  const initializedHeaders = new WeakSet<HTMLElement>();
-  
   document.addEventListener('astro:page-load', () => {
-    const navBar = document.querySelector('.site-nav .nav-bar');
     const navToggle = document.getElementById('navToggle');
     const mobileMenu = document.getElementById('mobileMenu');
+    const mobileSearchToggle = document.getElementById('mobileSearchToggle');
+    const mobileSearchPopup = document.getElementById('mobileSearchPopup');
     const searchInput = document.getElementById('productSearch') as HTMLInputElement | null;
+    const searchInputMobile = document.getElementById('productSearchMobile') as HTMLInputElement | null;
+    const header = document.getElementById('mainNav');
 
-    // Set mobile menu top position based on nav height
-    const updateMobileMenuPosition = () => {
-      if (mobileMenu && navBar) {
-        const navHeight = navBar.getBoundingClientRect().height;
-        const header = navBar.closest('header');
-        const headerBottom = header ? header.getBoundingClientRect().bottom : navHeight;
-        mobileMenu.style.top = `${headerBottom}px`;
-      }
-    };
-
-    // Initial state
-    updateMobileMenuPosition();
-    window.addEventListener('resize', updateMobileMenuPosition);
-
-    // Mobile menu toggle function
-    const toggleMobileMenu = (open: boolean) => {
-      if (!mobileMenu || !navToggle) return;
-      
-      if (open) {
-        updateMobileMenuPosition();
-        mobileMenu.classList.remove('hidden');
-        mobileMenu.classList.add('menu-open');
-        navToggle.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-        
-        // Close search popup if open
-        const mobileSearchPopup = document.getElementById('mobileSearchPopup');
-        const mobileSearchToggle = document.getElementById('mobileSearchToggle');
-        if (mobileSearchPopup && !mobileSearchPopup.classList.contains('hidden')) {
-          mobileSearchPopup.classList.add('hidden');
-          mobileSearchToggle?.setAttribute('aria-expanded', 'false');
-        }
-      } else {
-        mobileMenu.classList.add('hidden');
-        mobileMenu.classList.remove('menu-open');
-        navToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      }
-    };
-
-    // Hamburger menu toggle
-    navToggle?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      e.preventDefault();
-      const isOpen = !mobileMenu?.classList.contains('hidden');
-      toggleMobileMenu(!isOpen);
-    });
-
-    // Close menu when clicking outside (with slight delay to avoid conflicts)
-    let clickOutsideTimeout: ReturnType<typeof setTimeout> | null = null;
-    document.addEventListener('click', (e) => {
-      if (!mobileMenu || !navToggle) return;
-      
-      const isMenuOpen = !mobileMenu.classList.contains('hidden');
-      if (!isMenuOpen) return;
-      
-      // Clear any pending timeout
-      if (clickOutsideTimeout) {
-        clearTimeout(clickOutsideTimeout);
-      }
-      
-      // Small delay to ensure toggle click is processed first
-      clickOutsideTimeout = setTimeout(() => {
-        // Check if click is outside menu and toggle button
-        const clickedInsideMenu = mobileMenu.contains(e.target as Node);
-        const clickedOnToggle = navToggle.contains(e.target as Node);
-        
-        if (!clickedInsideMenu && !clickedOnToggle) {
-          toggleMobileMenu(false);
-        }
-      }, 10);
-    });
-
-    // Close menu when clicking on menu links (good UX)
-    mobileMenu?.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      // If clicking on a link, close the menu
-      if (target.tagName === 'A' || target.closest('a')) {
-        toggleMobileMenu(false);
-      }
-    });
-
-    // Search functionality (desktop and mobile)
+    // Search functionality
     const setupSearch = (input: HTMLInputElement | null) => {
       if (!input) return;
       
@@ -520,95 +235,122 @@ const { pageTitle } = Astro.props;
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
           if (!query) {
-            // Dispatch event to reapply other filters (search cleared)
             window.dispatchEvent(new CustomEvent('searchCleared'));
             return;
           }
-
-          // Dispatch search event for the homepage filter system to handle
           window.dispatchEvent(new CustomEvent('searchPerformed', { detail: { query } }));
-        }, 300); // Debounce search
+        }, 300);
       });
     };
 
     setupSearch(searchInput);
+    setupSearch(searchInputMobile);
 
-    // Mobile search popup toggle
-    const mobileSearchToggle = document.getElementById('mobileSearchToggle');
-    const mobileSearchPopup = document.getElementById('mobileSearchPopup');
-    const searchInputMobilePopup = document.getElementById('productSearchMobilePopup') as HTMLInputElement;
-
-    if (mobileSearchToggle && mobileSearchPopup) {
-      const toggleSearchPopup = (open: boolean) => {
-        if (open) {
-          mobileSearchPopup.classList.remove('hidden');
-          mobileSearchToggle.setAttribute('aria-expanded', 'true');
-          // Focus the input when opened
-          setTimeout(() => {
-            searchInputMobilePopup?.focus();
-          }, 100);
-        } else {
+    // Mobile menu toggle
+    navToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = mobileMenu?.classList.contains('menu-open');
+      
+      if (isOpen) {
+        mobileMenu?.classList.remove('menu-open');
+        mobileMenu?.classList.add('hidden');
+        navToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      } else {
+        // Close search if open
+        if (mobileSearchPopup && !mobileSearchPopup.classList.contains('hidden')) {
           mobileSearchPopup.classList.add('hidden');
-          mobileSearchToggle.setAttribute('aria-expanded', 'false');
+          mobileSearchToggle?.setAttribute('aria-expanded', 'false');
         }
-      };
-
-      mobileSearchToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = !mobileSearchPopup.classList.contains('hidden');
-        toggleSearchPopup(!isOpen);
-      });
-
-      // Close search popup when menu is opened
-      // Note: This is handled by the main navToggle click handler above
-
-      // Close search popup when clicking outside
-      document.addEventListener('click', (e) => {
-        if (mobileSearchPopup && !mobileSearchPopup.contains(e.target as Node) && 
-            mobileSearchToggle && !mobileSearchToggle.contains(e.target as Node)) {
-          toggleSearchPopup(false);
+        
+        mobileMenu?.classList.remove('hidden');
+        mobileMenu?.classList.add('menu-open');
+        navToggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        
+        // Position menu below header
+        if (mobileMenu && header) {
+          const headerHeight = header.getBoundingClientRect().height;
+          mobileMenu.style.top = `${headerHeight}px`;
         }
-      });
-
-      // Setup search for popup input
-      if (searchInputMobilePopup) {
-        setupSearch(searchInputMobilePopup);
       }
-    }
+    });
 
-    // Scroll detection for compact nav - only initialize once per header element
-    const header = document.getElementById('mainNav');
-    if (header && !initializedHeaders.has(header)) {
-      initializedHeaders.add(header);
+    // Mobile search toggle
+    mobileSearchToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = !mobileSearchPopup?.classList.contains('hidden');
       
+      if (isOpen) {
+        mobileSearchPopup?.classList.add('hidden');
+        mobileSearchToggle.setAttribute('aria-expanded', 'false');
+      } else {
+        // Close menu if open
+        if (mobileMenu && mobileMenu.classList.contains('menu-open')) {
+          mobileMenu.classList.remove('menu-open');
+          mobileMenu.classList.add('hidden');
+          navToggle?.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        }
+        
+        mobileSearchPopup?.classList.remove('hidden');
+        mobileSearchToggle.setAttribute('aria-expanded', 'true');
+        setTimeout(() => searchInputMobile?.focus(), 100);
+      }
+    });
+
+    // Close menu/search when clicking outside
+    document.addEventListener('click', (e) => {
+      const target = e.target as Node;
+      
+      // Close mobile menu if open and clicked outside
+      if (mobileMenu && mobileMenu.classList.contains('menu-open')) {
+        if (!mobileMenu.contains(target) && !navToggle?.contains(target)) {
+          mobileMenu.classList.remove('menu-open');
+          mobileMenu.classList.add('hidden');
+          navToggle?.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        }
+      }
+      
+      // Close search popup if open and clicked outside
+      if (mobileSearchPopup && !mobileSearchPopup.classList.contains('hidden')) {
+        if (!mobileSearchPopup.contains(target) && !mobileSearchToggle?.contains(target)) {
+          mobileSearchPopup.classList.add('hidden');
+          mobileSearchToggle?.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+
+    // Close menu when clicking on links inside
+    mobileMenu?.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'A') {
+        mobileMenu.classList.remove('menu-open');
+        mobileMenu.classList.add('hidden');
+        navToggle?.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Scroll detection for compact nav
+    let scrollInitialized = false;
+    
+    if (header && !scrollInitialized) {
+      scrollInitialized = true;
       let isScrolled = false;
-      let lastScrollY = window.scrollY;
-      let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
-      const SCROLL_THRESHOLD_DOWN = 60; // When scrolling down, activate at 60px
-      const SCROLL_THRESHOLD_UP = 40; // When scrolling up, deactivate at 40px (hysteresis)
-      
       let isTransitioning = false;
+      const SCROLL_THRESHOLD = 60;
 
       const handleScroll = () => {
-        // Prevent handling scroll during transitions to avoid feedback loops
         if (isTransitioning) return;
         
-        const currentScrollY = window.scrollY;
-        const scrollDelta = Math.abs(currentScrollY - lastScrollY);
-        
-        // Ignore tiny scroll movements that might be caused by layout shifts
-        if (scrollDelta < 1) return;
-        
-        lastScrollY = currentScrollY;
-        
-        // Use different thresholds for scrolling up vs down to prevent flickering
-        const shouldBeScrolled = currentScrollY > SCROLL_THRESHOLD_DOWN;
+        const shouldBeScrolled = window.scrollY > SCROLL_THRESHOLD;
         
         if (shouldBeScrolled !== isScrolled) {
           isTransitioning = true;
           isScrolled = shouldBeScrolled;
           
-          // Use requestAnimationFrame to ensure DOM is ready
           requestAnimationFrame(() => {
             if (isScrolled) {
               header.classList.add('scrolled');
@@ -616,41 +358,30 @@ const { pageTitle } = Astro.props;
               header.classList.remove('scrolled');
             }
             
-            // Allow transitions to complete before handling scroll again
             setTimeout(() => {
               isTransitioning = false;
-            }, 350); // Slightly longer than CSS transition (300ms)
+            }, 350);
           });
         }
       };
 
-      // Debounced scroll handler to prevent excessive calls
-      const debouncedHandleScroll = () => {
-        if (scrollTimeout) {
-          clearTimeout(scrollTimeout);
-        }
-        scrollTimeout = setTimeout(() => {
-          requestAnimationFrame(handleScroll);
-        }, 10); // Small debounce to batch rapid scroll events
-      };
-
-      // Initial check - set state immediately without transition
-      const initialScrollY = window.scrollY;
-      if (initialScrollY > SCROLL_THRESHOLD_DOWN) {
-        isScrolled = true;
+      // Initial state
+      if (window.scrollY > SCROLL_THRESHOLD) {
         header.classList.add('scrolled');
-        lastScrollY = initialScrollY;
-      } else {
-        isScrolled = false;
-        header.classList.remove('scrolled');
-        lastScrollY = initialScrollY;
+        isScrolled = true;
       }
-      
-      // Wait for initial render to complete before enabling transitions
-      requestAnimationFrame(() => {
-        // Add scroll listener with passive flag for better performance
-        window.addEventListener('scroll', debouncedHandleScroll, { passive: true });
-      });
+
+      // Throttled scroll listener
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
     }
   });
 </script>
