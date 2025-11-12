@@ -229,6 +229,16 @@ const staticProducts: Product[] = [
     primaryCategory: "cat-cool-tech",
     tags: ["20-50", "for-him", "for-her", "for-kids"],
   },
+  {
+    name: "7-Speed Folding Electric Bike - 25mph",
+    description: "Equipped with 48V 10.4Ah removable battery, the adult electric bike can travel 25miles in Pure Electric Mode or 45 miles in Pedal-Assist Mode. Plus, carry an extra battery for embraced a longer travel experiences.  Achieve a max speed of 20-25MPH, and deals with 15% hill grade at ease. And the 7-speed system enables you to choose the gear that you enjoy, it will help you adapt to different terrains.",
+    image: "https://www.highestliked.com/ebike.jpg",
+    url: "https://amzn.to/3JuBnvl",
+    categories: ["cat-adventure", "cat-cool-tech"],
+    primaryCategory: "cat-adventure",
+    tags: ["over-100", "for-him", "birthday", "christmas", "useful"],
+    price: "494.99",
+  },
 ];
 
 // Helper function to normalize image URLs
