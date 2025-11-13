@@ -21,8 +21,6 @@ const socialLinks = [
 const mainLinks: Array<{ href: string; label: string }> = [];
 
 const legalLinks: Array<{ href: string; label: string }> = [
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
   { href: '/affiliate-disclosure', label: 'Affiliate Disclosure' },
   { href: '/privacy-policy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms' },
@@ -32,7 +30,7 @@ const copyright = {
   text: '© HighestLiked 2025',
 };
 
-const amazonDisclosure = 'As an Amazon Associate, I earn from qualifying purchases. Some links on this site are affiliate links — meaning I may earn a commission if you buy through them, at no extra cost to you.';
+const amazonDisclosure = `As an Amazon Associate, I earn from qualifying purchases. <a href="/affiliate-disclosure" class="underline-offset-4 hover:underline text-[#6366f1] hover:text-[#8b5cf6] transition-colors">Some links on this site are affiliate links</a> — meaning I may earn a commission if you buy through them, at no extra cost to you.`;
 ---
 
 {

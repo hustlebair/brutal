@@ -96,9 +96,10 @@ export function Footer({
           </div>
         </div>
         {amazonDisclosure && (
-          <div className="mt-6 pt-6 border-t text-sm text-gray-700 leading-relaxed text-center">
-            {amazonDisclosure}
-          </div>
+          <div 
+            className="mt-6 pt-6 border-t text-sm text-gray-700 leading-relaxed text-center"
+            dangerouslySetInnerHTML={{ __html: amazonDisclosure }}
+          />
         )}
       </div>
     </footer>
