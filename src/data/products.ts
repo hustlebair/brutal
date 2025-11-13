@@ -45,8 +45,8 @@ const staticProducts: Product[] = [
     description: "The Morf Fidget Worm flexes, collapses, and twists for endless play. A fun versatile slug toy designed to keep hands busy, minds calm, and focus sharp wherever you are.",
     image: "https://www.highestliked.com/morf.jpg",
     url: "https://amzn.to/4qN06vx",
-    categories: ["🔥 Trending"],
-    primaryCategory: "🔥 Trending",
+    categories: ["cat-home-stuff"],
+    primaryCategory: "cat-home-stuff",
     tags: ["gifts-for-her", "gifts-for-him", "under-30"],
   },
   {
@@ -135,8 +135,8 @@ const staticProducts: Product[] = [
     description: "Not for children! This is a high powered mini compound bow that comes with 10 steel tipped arrows that can pierce through a cardboard box. A great gift for anyone who likes to shoot things.",
     image: "https://www.highestliked.com/compoundbow.jpg",
     url: "https://amzn.to/49bfdZj",
-    categories: ["🔥 Trending", "🚀 TikTok Finds"],
-    primaryCategory: "🚀 TikTok Finds",
+    categories: ["cat-lol-gifts"],
+    primaryCategory: "cat-lol-gifts",
     tags: ["gifts-for-him", "under-20", "tiktok-finds"],
   },
   {
@@ -171,8 +171,8 @@ const staticProducts: Product[] = [
     description: "This Bubble Gun with 69 holes can generate more than thousands bubbles per minute with four colorful lights to bring you amazing effects, whatever day or night, you can see rich colorful bubbles are blown out when pressing the trigger, the fantastic lights render colorful bubbles, and you can enjoy a colorful scene at night day.",
     image: "https://www.highestliked.com/bubblegun.jpg",
     url: "https://amzn.to/4p9ok1z",
-    categories: ["🔥 Trending"],
-    primaryCategory: "🔥 Trending",
+    categories: ["cat-home-stuff"],
+    primaryCategory: "cat-home-stuff",
     tags: ["gifts-for-kids", "under-20"],
   },
   {
