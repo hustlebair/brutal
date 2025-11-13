@@ -18,9 +18,9 @@ const PRICE_FILTERS: ChipFilter[] = [
 ];
 
 const RECIPIENT_FILTERS: ChipFilter[] = [
-  { id: 'rcp-for-him', label: 'for him', filterTag: 'gifts-for-him' },
-  { id: 'rcp-for-her', label: 'for her', filterTag: 'gifts-for-her' },
-  { id: 'rcp-for-kids', label: 'for kids', filterTag: 'gifts-for-kids' },
+  { id: 'rcp-for-him', label: 'for him', filterTag: 'for-him' },
+  { id: 'rcp-for-her', label: 'for her', filterTag: 'for-her' },
+  { id: 'rcp-for-kids', label: 'for kids', filterTag: 'for-kids' },
 ];
 
 export default function TagGroupSelection({ onFilterSelect }: TagGroupSelectionProps) {
@@ -41,13 +41,16 @@ export default function TagGroupSelection({ onFilterSelect }: TagGroupSelectionP
         .map(id => defs.find(d => d.id === id)?.filterTag)
         .filter(Boolean) as string[];
 
-    const tags = [
-      ...mapFilterTags(price, PRICE_FILTERS),
-      ...mapFilterTags(recipient, RECIPIENT_FILTERS),
-    ].map(t => t.toLowerCase());
+    const priceTags = mapFilterTags(price, PRICE_FILTERS).map(t => t.toLowerCase());
+    const recipientTags = mapFilterTags(recipient, RECIPIENT_FILTERS).map(t => t.toLowerCase());
 
-    onFilterSelect?.(tags.length ? tags.join(',') : null);
-    window.dispatchEvent(new CustomEvent('filtersSelected', { detail: { filters: tags } }));
+    // Emit grouped filters for AND/OR logic
+    window.dispatchEvent(new CustomEvent('filtersSelectedGrouped', { 
+      detail: { 
+        priceFilters: priceTags,
+        recipientFilters: recipientTags
+      } 
+    }));
   };
 
   const onPrice = (id: string) => {

@@ -139,18 +139,23 @@ const allProducts = await getProducts(baseUrl);
 </style>
 
 <script>
-  // Handle filter chip filtering (supports multi-select AND logic)
+  // Handle filter chip filtering with grouped AND/OR logic
   document.addEventListener('astro:page-load', () => {
     // Get category from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const categoryFilter = urlParams.get('category')?.toLowerCase();
     
     let currentSearchQuery = '';
-    let currentTagFilters: string[] = [];
+    let currentPriceFilters: string[] = [];
+    let currentRecipientFilters: string[] = [];
 
-    const applyFilters = (selectedFilters: string[] = [], category?: string, searchQuery: string = '') => {
+    const applyFilters = (
+      priceFilters: string[] = [], 
+      recipientFilters: string[] = [],
+      category?: string, 
+      searchQuery: string = ''
+    ) => {
       const productWrappers = document.querySelectorAll('.product-card-wrapper');
-      const active = Array.isArray(selectedFilters) ? selectedFilters.map(s => String(s).toLowerCase()) : [];
 
       productWrappers.forEach((wrapper) => {
         const tags = (wrapper.getAttribute('data-tags') || '').split(',').map(t => t.trim()).filter(Boolean);
@@ -171,15 +176,23 @@ const allProducts = await getProducts(baseUrl);
           categoryMatch = categories.some(c => c.toLowerCase() === normalizedCategory);
         }
 
-        // Tag filter
-        let tagMatch = true;
-        if (active.length > 0) {
-          // OR match: at least one of the selected tags must be present on the product
-          tagMatch = active.some(t => tags.includes(t));
+        // Price filter (OR within group)
+        let priceMatch = true;
+        if (priceFilters.length > 0) {
+          priceMatch = priceFilters.some(pf => tags.includes(pf));
         }
 
-        // Show if all filters match (search AND category AND tags)
-        if (searchMatch && categoryMatch && tagMatch) {
+        // Recipient filter (OR within group)
+        // Support both "for-him" and "gifts-for-him" formats
+        let recipientMatch = true;
+        if (recipientFilters.length > 0) {
+          recipientMatch = recipientFilters.some(rf => 
+            tags.includes(rf) || tags.includes(`gifts-${rf}`)
+          );
+        }
+
+        // AND logic between all groups
+        if (searchMatch && categoryMatch && priceMatch && recipientMatch) {
           wrapper.classList.remove('hidden');
         } else {
           wrapper.classList.add('hidden');
@@ -189,32 +202,25 @@ const allProducts = await getProducts(baseUrl);
 
     // Apply category filter on page load
     if (categoryFilter) {
-      applyFilters([], categoryFilter);
+      applyFilters([], [], categoryFilter);
     }
 
     // Listen for search events
     window.addEventListener('searchPerformed', ((e: CustomEvent) => {
       currentSearchQuery = e.detail.query.toLowerCase();
-      applyFilters(currentTagFilters, categoryFilter || undefined, currentSearchQuery);
+      applyFilters(currentPriceFilters, currentRecipientFilters, categoryFilter || undefined, currentSearchQuery);
     }) as EventListener);
 
     window.addEventListener('searchCleared', () => {
       currentSearchQuery = '';
-      applyFilters(currentTagFilters, categoryFilter || undefined, '');
+      applyFilters(currentPriceFilters, currentRecipientFilters, categoryFilter || undefined, '');
     });
 
-    // Backward compatibility: single-select event
-    window.addEventListener('filterSelected', ((e: CustomEvent) => {
-      const selectedFilter = e.detail.filter;
-      currentTagFilters = selectedFilter === null ? [] : [selectedFilter];
-      applyFilters(currentTagFilters, categoryFilter || undefined, currentSearchQuery);
-    }) as EventListener);
-
-    // New multi-select event
-    window.addEventListener('filtersSelected', ((e: CustomEvent) => {
-      const arr = Array.isArray(e.detail.filters) ? e.detail.filters : [];
-      currentTagFilters = arr;
-      applyFilters(arr, categoryFilter || undefined, currentSearchQuery);
+    // New grouped filters event (AND between groups, OR within groups)
+    window.addEventListener('filtersSelectedGrouped', ((e: CustomEvent) => {
+      currentPriceFilters = e.detail.priceFilters || [];
+      currentRecipientFilters = e.detail.recipientFilters || [];
+      applyFilters(currentPriceFilters, currentRecipientFilters, categoryFilter || undefined, currentSearchQuery);
     }) as EventListener);
   });
 </script>
