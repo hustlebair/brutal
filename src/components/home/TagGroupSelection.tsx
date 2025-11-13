@@ -67,7 +67,7 @@ export default function TagGroupSelection({ onFilterSelect }: TagGroupSelectionP
   return (
     <>
       <style>{`
-        .tg-container { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem 0 1.75rem; overflow: visible; }
+        .tg-container { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.75rem 0; overflow: visible; }
         .tg-section { width: 100%; max-width: 900px; padding: 0 1rem; margin-bottom: 0.5rem; display: flex; justify-content: center; }
         /* Mobile: allow wrapping to next line */
         .tg-scroll { display: flex; flex-wrap: wrap; gap: 0.5rem; overflow: visible; padding: 0.5rem 0; scrollbar-width: none; -ms-overflow-style: none; justify-content: center; }

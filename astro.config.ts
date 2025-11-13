@@ -23,6 +23,7 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
+        '@': resolve(root, 'src'),
         '@components': resolve(root, 'src/components'),
         '@layouts': resolve(root, 'src/layouts'),
         '@pages': resolve(root, 'src/pages'),

@@ -4,6 +4,7 @@ import ProductCard from '@components/home/ProductCard.astro';
 import GradientDotsBackground from '@components/home/GradientDotsBackground';
 import TagGroupSelection from '@components/home/TagGroupSelection';
 import { getProducts, type Product } from '@data/products';
+import { Particles } from '@components/ui/Particles';
 
 // Define valid category slugs and their matching patterns
 const CATEGORY_MAP: Record<string, { displayName: string; matchPatterns: string[]; heroImage?: string }> = {
@@ -83,18 +84,29 @@ const categoryProducts = allProducts.filter(product => {
     <!-- Hero Section -->
     {heroImage ? (
       <section class="relative overflow-hidden hero-with-image">
-        <div class="container mx-auto px-4">
+        <!-- Full-width Particles Background -->
+        <Particles 
+          client:load
+          colors={["#FCB55B", "#FC3DB1"]}
+          quantity={200}
+          staticity={30}
+          ease={40}
+          size={0.4}
+          vx={0.05}
+          vy={0.05}
+        />
+        <div class="container mx-auto px-4 relative z-10">
           <!-- Hero Image Background -->
           <div class="relative overflow-hidden rounded-lg hero-image-container">
             <img 
               src={heroImage} 
               alt={`${categoryName} banner`}
-              class={`absolute inset-0 w-full h-full object-cover hero-image ${category === 'adventure' ? 'object-bottom-hero' : ''}`}
+              class={`absolute inset-0 w-full h-full object-cover hero-image z-[1] ${category === 'adventure' ? 'object-bottom-hero' : ''}`}
             />
-            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50 z-[2]"></div>
             
             <!-- Hero Content -->
-            <div class="relative z-10 px-4 md:px-8 py-20 md:py-32 text-center">
+            <div class="relative z-[3] px-4 md:px-8 py-20 md:py-32 text-center">
               <h1 class="libre-baskerville-bold text-4xl md:text-6xl lg:text-7xl text-white mb-4 md:mb-6 leading-tight drop-shadow-2xl">
                 {categoryName}
               </h1>
@@ -197,11 +209,27 @@ const categoryProducts = allProducts.filter(product => {
   .hero-with-image {
     padding: 2rem 0;
     position: relative;
+    min-height: 600px;
   }
 
   .hero-image-container {
     min-height: 500px;
     position: relative;
+  }
+
+  @media (max-width: 768px) {
+    .hero-image-container {
+      min-height: 300px;
+    }
+    
+    .hero-with-image {
+      min-height: 400px;
+    }
+
+    .hero-with-image [class*="z-[3]"] {
+      padding-top: 3rem !important;
+      padding-bottom: 3rem !important;
+    }
   }
 
   .hero-image {

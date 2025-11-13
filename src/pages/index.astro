@@ -4,11 +4,51 @@ import ProductCard from '@components/home/ProductCard.astro';
 import GradientDotsBackground from '@components/home/GradientDotsBackground';
 import TagGroupSelection from '@components/home/TagGroupSelection';
 import { getProducts, type Product } from '@data/products';
+import { Particles } from '@components/ui/Particles';
+import SphereImageGrid, { type ImageData } from '@components/ui/ImgSphere';
 
 // Get base URL for image normalization (works in both dev and production)
 // Use site URL in production, or current origin in dev
 const baseUrl = Astro.site?.toString() || new URL(Astro.url.origin).toString();
 const allProducts = await getProducts(baseUrl);
+
+// Prepare images for sphere - use product images, duplicate to fill sphere
+const sphereImages: ImageData[] = [];
+const productsForSphere = allProducts.slice(0, 20); // Use first 20 products
+for (let i = 0; i < 60; i++) {
+  const product = productsForSphere[i % productsForSphere.length];
+  
+  // Extract price tag and format it
+  const priceTag = product.tags?.find(tag => {
+    if (/^under-\d+$/.test(tag)) return true;
+    if (/^over-\d+$/.test(tag)) return true;
+    if (/^\d+-\d+$/.test(tag)) return true;
+    return false;
+  });
+  
+  let priceLabel;
+  if (priceTag) {
+    if (priceTag.startsWith('under-')) {
+      priceLabel = `under $${priceTag.replace('under-', '')}`;
+    } else if (priceTag.startsWith('over-')) {
+      priceLabel = `over $${priceTag.replace('over-', '')}`;
+    } else if (/^\d+-\d+$/.test(priceTag)) {
+      const parts = priceTag.split('-');
+      priceLabel = `$${parts[0]}-$${parts[1]}`;
+    }
+  }
+  
+  sphereImages.push({
+    id: `product-${i + 1}`,
+    src: product.image,
+    alt: product.name,
+    title: product.name,
+    description: product.description,
+    url: product.url,
+    primaryCategory: product.primaryCategory,
+    priceLabel: priceLabel
+  });
+}
 ---
 
 <Layout
@@ -19,13 +59,40 @@ const allProducts = await getProducts(baseUrl);
 >
   <main class="bg-white">
     <!-- Hero Section -->
-    <section class="px-4 md:px-8 pt-16 pb-4 text-center">
-      <h1 class="libre-baskerville-bold text-4xl md:text-6xl lg:text-7xl text-black mb-4 md:mb-6 leading-tight">
-        The Internet's <span class="text-gradient-logo">Wishlist</span>
-      </h1>
-      <p class="libre-baskerville-regular text-lg md:text-xl lg:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-        The Highest-Liked gadgets, gifts, and viral products.
-      </p>
+    <section class="relative overflow-hidden hero-section px-4 md:px-8 pt-32 md:pt-40 pb-4">
+      <!-- Full-width Particles Background -->
+      <Particles 
+        client:load
+        colors={["#FCB55B", "#FC3DB1"]}
+        quantity={200}
+        staticity={30}
+        ease={40}
+        size={0.4}
+        vx={0.05}
+        vy={0.05}
+      />
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="flex flex-col items-center justify-center min-h-[500px] md:min-h-[600px]">
+          <!-- Image Sphere -->
+          <div class="relative z-10 flex justify-center items-center">
+            <SphereImageGrid
+              client:load
+              images={sphereImages}
+              containerSize={500}
+              sphereRadius={180}
+              dragSensitivity={0.8}
+              momentumDecay={0.96}
+              maxRotationSpeed={6}
+              baseImageScale={0.22}
+              hoverScale={1.3}
+              perspective={1000}
+              autoRotate={true}
+              autoRotateSpeed={0.2}
+              className="hero-sphere"
+            />
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Tag Group Selection Section -->
@@ -65,7 +132,7 @@ const allProducts = await getProducts(baseUrl);
               <div
                 class="product-card-wrapper"
                 data-tags={product.tags?.map(t => t.toLowerCase()).join(',') || ''}
-                data-categories={[...(product.categories || []), product.primaryCategory].filter(Boolean).map(c => c.toLowerCase()).join(',')}
+                data-categories={[...(product.categories || []), product.primaryCategory].filter(Boolean).filter((c): c is string => typeof c === 'string').map(c => c.toLowerCase()).join(',')}
               >
                 <ProductCard
                   name={product.name}
@@ -127,6 +194,30 @@ const allProducts = await getProducts(baseUrl);
     -webkit-text-stroke: 1px #000000;
     text-stroke: 1px #000000;
     paint-order: stroke fill;
+  }
+
+  .hero-section {
+    padding: 0;
+    position: relative;
+    min-height: 500px;
+  }
+
+  .hero-image-container {
+    min-height: 500px;
+    position: relative;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      min-height: 400px;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .hero-sphere {
+      transform: scale(0.6);
+      transform-origin: center;
+    }
   }
 
   .product-card-wrapper {
