@@ -1,0 +1,246 @@
+---
+import Layout from '@layouts/Default.astro';
+import ProductCard from '@components/home/ProductCard.astro';
+import GradientDotsBackground from '@components/home/GradientDotsBackground';
+import TagGroupSelection from '@components/home/TagGroupSelection';
+import { getProducts, type Product } from '@data/products';
+
+// Define valid category slugs and their matching patterns
+const CATEGORY_MAP: Record<string, { displayName: string; matchPatterns: string[] }> = {
+  'cooltech': { 
+    displayName: 'Cool Tech', 
+    matchPatterns: ['cat-cool-tech', 'cool tech', 'cooltech'] 
+  },
+  'homestuff': { 
+    displayName: 'Home Stuff', 
+    matchPatterns: ['cat-home-stuff', 'home stuff', 'homestuff'] 
+  },
+  'selfcare': { 
+    displayName: 'Self Care', 
+    matchPatterns: ['cat-self-care', 'self care', 'selfcare'] 
+  },
+  'lolgifts': { 
+    displayName: 'LOL Gifts', 
+    matchPatterns: ['cat-lol-gifts', 'lol gifts', 'lolgifts'] 
+  },
+  'adventure': { 
+    displayName: 'Adventure', 
+    matchPatterns: ['cat-adventure', 'adventure'] 
+  },
+  'seasonal': { 
+    displayName: 'Seasonal', 
+    matchPatterns: ['cat-seasonal', 'seasonal'] 
+  },
+};
+
+// Get the category from the URL
+export async function getStaticPaths() {
+  return Object.keys(CATEGORY_MAP).map(slug => ({
+    params: { category: slug }
+  }));
+}
+
+const { category } = Astro.params;
+const categoryConfig = CATEGORY_MAP[category as string];
+
+// Redirect if invalid category
+if (!categoryConfig) {
+  return Astro.redirect('/');
+}
+
+const categoryName = categoryConfig.displayName;
+const matchPatterns = categoryConfig.matchPatterns;
+
+// Get base URL for image normalization
+const baseUrl = Astro.site?.toString() || new URL(Astro.url.origin).toString();
+const allProducts = await getProducts(baseUrl);
+
+// Filter products by category
+const categoryProducts = allProducts.filter(product => {
+  const categories = [
+    ...(product.categories || []),
+    product.primaryCategory
+  ].filter(Boolean).filter((c): c is string => typeof c === 'string').map(c => c.toLowerCase());
+  
+  // Check if any product category matches any of our match patterns
+  return categories.some(productCat => 
+    matchPatterns.some(pattern => 
+      productCat.includes(pattern.toLowerCase()) || pattern.toLowerCase().includes(productCat)
+    )
+  );
+});
+---
+
+<Layout
+  title={`${categoryName} - Highest Liked`}
+  pageTitle={`HighestLiked - ${categoryName}`}
+  description={`Discover the best ${categoryName} products - curated collection of trending items and viral finds.`}
+>
+  <main class="bg-white">
+    <!-- Hero Section -->
+    <section class="px-4 md:px-8 pt-16 pb-4 text-center">
+      <h1 class="libre-baskerville-bold text-4xl md:text-6xl lg:text-7xl text-black mb-4 md:mb-6 leading-tight">
+        {categoryName}
+      </h1>
+      <p class="libre-baskerville-regular text-lg md:text-xl lg:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+        Curated collection of {categoryName.toLowerCase()} products
+      </p>
+      <a href="/" class="inline-block mt-6 text-[#6366f1] hover:text-[#8b5cf6] font-semibold transition-colors">
+        ← Back to All Products
+      </a>
+    </section>
+
+    <!-- Tag Group Selection Section -->
+    <TagGroupSelection client:load onFilterSelect={() => {}} />
+
+    <!-- Product Grid Section -->
+    <section id="products" class="px-4 md:px-8 py-8 particles-section">
+      <GradientDotsBackground client:load />
+      <div class="max-w-7xl mx-auto relative z-10">
+        {categoryProducts.length === 0 ? (
+          <div class="text-center py-16">
+            <p class="text-xl text-gray-600">No products found in this category yet.</p>
+          </div>
+        ) : (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="product-grid">
+            {categoryProducts.map((product: Product) => {
+              // Extract price range from tags - ONLY match specific price patterns
+              const priceTag = product.tags?.find(tag => {
+                if (/^under-\d+$/.test(tag)) return true;
+                if (/^over-\d+$/.test(tag)) return true;
+                if (/^\d+-\d+$/.test(tag)) return true;
+                return false;
+              });
+              
+              // Format price label
+              let priceLabel;
+              if (priceTag) {
+                if (priceTag.startsWith('under-')) {
+                  priceLabel = `under $${priceTag.replace('under-', '')}`;
+                } else if (priceTag.startsWith('over-')) {
+                  priceLabel = `over $${priceTag.replace('over-', '')}`;
+                } else if (/^\d+-\d+$/.test(priceTag)) {
+                  const parts = priceTag.split('-');
+                  priceLabel = `$${parts[0]}-$${parts[1]}`;
+                }
+              }
+              
+              return (
+                <div
+                  class="product-card-wrapper"
+                  data-tags={product.tags?.map(t => t.toLowerCase()).join(',') || ''}
+                  data-categories={[...(product.categories || []), product.primaryCategory].filter(Boolean).filter((c): c is string => typeof c === 'string').map(c => c.toLowerCase()).join(',')}
+                >
+                  <ProductCard
+                    name={product.name}
+                    description={product.description}
+                    image={product.image}
+                    url={product.url}
+                    primaryCategory={product.primaryCategory}
+                    price={priceLabel}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .libre-baskerville-regular {
+    font-family: "Libre Baskerville", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  .libre-baskerville-bold {
+    font-family: "Libre Baskerville", serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  .particles-section {
+    position: relative;
+    background-color: white;
+    overflow: hidden;
+  }
+
+  .particles-section > *:not(.particles-background) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .product-card-wrapper {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .product-card-wrapper.hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  // Same filtering logic as index.astro
+  document.addEventListener('astro:page-load', () => {
+    let currentSearchQuery = '';
+    let currentPriceFilters: string[] = [];
+    let currentRecipientFilters: string[] = [];
+
+    const applyFilters = (
+      priceFilters: string[] = [], 
+      recipientFilters: string[] = [],
+      searchQuery: string = ''
+    ) => {
+      const productWrappers = document.querySelectorAll('.product-card-wrapper');
+
+      productWrappers.forEach((wrapper) => {
+        const tags = (wrapper.getAttribute('data-tags') || '').split(',').map(t => t.trim()).filter(Boolean);
+        const name = wrapper.querySelector('h3')?.textContent?.toLowerCase() || '';
+        const description = wrapper.querySelector('p')?.textContent?.toLowerCase() || '';
+
+        let searchMatch = true;
+        if (searchQuery) {
+          searchMatch = name.includes(searchQuery) || description.includes(searchQuery);
+        }
+
+        let priceMatch = true;
+        if (priceFilters.length > 0) {
+          priceMatch = priceFilters.some(pf => tags.includes(pf));
+        }
+
+        let recipientMatch = true;
+        if (recipientFilters.length > 0) {
+          recipientMatch = recipientFilters.some(rf => 
+            tags.includes(rf) || tags.includes(`gifts-${rf}`)
+          );
+        }
+
+        if (searchMatch && priceMatch && recipientMatch) {
+          wrapper.classList.remove('hidden');
+        } else {
+          wrapper.classList.add('hidden');
+        }
+      });
+    };
+
+    window.addEventListener('searchPerformed', ((e: CustomEvent) => {
+      currentSearchQuery = e.detail.query.toLowerCase();
+      applyFilters(currentPriceFilters, currentRecipientFilters, currentSearchQuery);
+    }) as EventListener);
+
+    window.addEventListener('searchCleared', () => {
+      currentSearchQuery = '';
+      applyFilters(currentPriceFilters, currentRecipientFilters, '');
+    });
+
+    window.addEventListener('filtersSelectedGrouped', ((e: CustomEvent) => {
+      currentPriceFilters = e.detail.priceFilters || [];
+      currentRecipientFilters = e.detail.recipientFilters || [];
+      applyFilters(currentPriceFilters, currentRecipientFilters, currentSearchQuery);
+    }) as EventListener);
+  });
+</script>
+

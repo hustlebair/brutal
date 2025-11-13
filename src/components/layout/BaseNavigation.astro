@@ -105,7 +105,9 @@ const { pageTitle } = Astro.props;
       <!-- Desktop: Categories Row -->
       <div class='hidden md:flex items-center justify-center w-full categories-row'>
         {categories.map((cat, index) => {
-          const categoryUrl = `/?category=${encodeURIComponent(cat.name)}`;
+          // Create clean URL slug from category name
+          const categorySlug = cat.name.toLowerCase().replace(/\s+/g, '');
+          const categoryUrl = `/${categorySlug}`;
           return (
             <>
               <a href={categoryUrl} class='category-link poppins text-sm font-semibold hover:text-white transition-all rounded-lg hover:bg-gradient-to-br hover:from-[#6366f1] hover:to-[#8b5cf6] hover:shadow-md'>
@@ -133,7 +135,8 @@ const { pageTitle } = Astro.props;
       <div class='mb-2 px-2 text-xs font-bold text-gray-500 uppercase tracking-wider'>Categories</div>
       
       {categories.map((cat) => {
-        const categoryUrl = `/?category=${encodeURIComponent(cat.name)}`;
+        const categorySlug = cat.name.toLowerCase().replace(/\s+/g, '');
+        const categoryUrl = `/${categorySlug}`;
         return (
           <a class='block mb-2 px-4 py-2.5 bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 border-purple-400 rounded-lg font-semibold text-gray-800 hover:bg-gradient-to-r hover:from-[#FFF4E5] hover:to-[#FFE5E5] hover:border-[#FCB55B] transition-all text-sm' href={categoryUrl}>{cat.name}</a>
         );

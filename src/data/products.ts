@@ -55,7 +55,7 @@ const staticProducts: Product[] = [
     image: "https://www.highestliked.com/looplasso.jpg",
     url: "https://amzn.to/47uwo6X",
     categories: ["cat-cool-tech"],
-    primaryCategory: "cat-cool-techs",
+    primaryCategory: "cat-cool-tech",
     tags: ["gifts-for-him", "gifts-for-her", "under-50", "viral", "christmas"],
   },
   {
