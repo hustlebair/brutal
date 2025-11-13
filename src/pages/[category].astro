@@ -83,27 +83,29 @@ const categoryProducts = allProducts.filter(product => {
     <!-- Hero Section -->
     {heroImage ? (
       <section class="relative overflow-hidden hero-with-image">
-        <!-- Hero Image Background -->
-        <div class="absolute inset-0 z-0">
-          <img 
-            src={heroImage} 
-            alt={`${categoryName} banner`}
-            class={`w-full h-full object-cover ${category === 'adventure' ? 'object-bottom-hero' : ''}`}
-          />
-          <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50"></div>
-        </div>
-        
-        <!-- Hero Content -->
-        <div class="relative z-10 px-4 md:px-8 py-20 md:py-32 text-center">
-          <h1 class="libre-baskerville-bold text-4xl md:text-6xl lg:text-7xl text-white mb-4 md:mb-6 leading-tight drop-shadow-2xl">
-            {categoryName}
-          </h1>
-          <p class="libre-baskerville-regular text-lg md:text-xl lg:text-2xl text-gray-100 max-w-3xl mx-auto leading-relaxed drop-shadow-lg mb-8">
-            Curated collection of {categoryName.toLowerCase()} products
-          </p>
-          <a href="/" class="inline-block px-6 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/20 hover:border-white/50 transition-all duration-300 shadow-lg hover:shadow-xl">
-            ← Back to All Products
-          </a>
+        <div class="container mx-auto px-4">
+          <!-- Hero Image Background -->
+          <div class="relative overflow-hidden rounded-lg hero-image-container">
+            <img 
+              src={heroImage} 
+              alt={`${categoryName} banner`}
+              class={`absolute inset-0 w-full h-full object-cover hero-image ${category === 'adventure' ? 'object-bottom-hero' : ''}`}
+            />
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50"></div>
+            
+            <!-- Hero Content -->
+            <div class="relative z-10 px-4 md:px-8 py-20 md:py-32 text-center">
+              <h1 class="libre-baskerville-bold text-4xl md:text-6xl lg:text-7xl text-white mb-4 md:mb-6 leading-tight drop-shadow-2xl">
+                {categoryName}
+              </h1>
+              <p class="libre-baskerville-regular text-lg md:text-xl lg:text-2xl text-gray-100 max-w-3xl mx-auto leading-relaxed drop-shadow-lg mb-8">
+                Curated collection of {categoryName.toLowerCase()} products
+              </p>
+              <a href="/" class="inline-block px-6 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/20 hover:border-white/50 transition-all duration-300 shadow-lg hover:shadow-xl">
+                ← Back to All Products
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     ) : (
@@ -193,11 +195,16 @@ const categoryProducts = allProducts.filter(product => {
   }
 
   .hero-with-image {
+    padding: 2rem 0;
+    position: relative;
+  }
+
+  .hero-image-container {
     min-height: 500px;
     position: relative;
   }
 
-  .hero-with-image img {
+  .hero-image {
     animation: slowZoom 20s ease-in-out infinite alternate;
   }
 
